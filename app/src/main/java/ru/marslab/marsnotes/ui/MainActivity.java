@@ -1,8 +1,10 @@
-package ru.marslab.marsnotes;
+package ru.marslab.marsnotes.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import ru.marslab.marsnotes.R;
 
 public class MainActivity extends AppCompatActivity {
 
