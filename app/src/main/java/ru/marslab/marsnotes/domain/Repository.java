@@ -1,4 +1,10 @@
 package ru.marslab.marsnotes.domain;
 
-interface Repository {
+import java.util.List;
+
+import ru.marslab.marsnotes.domain.model.Note;
+
+public interface Repository {
+
+    List<Note> getNotes();
 }

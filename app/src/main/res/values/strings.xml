@@ -2,4 +2,8 @@
     <string name="app_name">MarsNotes</string>
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="node_date_title_text">Дата заметки</string>
+    <string name="node_time_title_text">Время заметки</string>
+    <string name="date_image_description">Date picker</string>
+    <string name="time_image_description">Time picker</string>
 </resources>

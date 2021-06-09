@@ -1,64 +1,55 @@
 package ru.marslab.marsnotes.ui;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import ru.marslab.marsnotes.R;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link NotesListFragment#newInstance} factory method to
- * create an instance of this fragment.
- *
- */
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import java.util.List;
+
+import ru.marslab.marsnotes.R;
+import ru.marslab.marsnotes.data.RepositoryImpl;
+import ru.marslab.marsnotes.domain.Repository;
+import ru.marslab.marsnotes.domain.model.Note;
+
 public class NotesListFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NotesListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static NotesListFragment newInstance(String param1, String param2) {
-        NotesListFragment fragment = new NotesListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public NotesListFragment() {
-        // Required empty public constructor
-    }
+    private Repository repository;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        repository = new RepositoryImpl();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_notes_list, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        LinearLayout notesList = view.findViewById(R.id.notes_list_container);
+        List<Note> notes = repository.getNotes();
+        for (Note note : notes) {
+            View noteView =
+                    LayoutInflater
+                            .from(requireContext())
+                            .inflate(R.layout.item_notes_list, notesList, false);
+            TextView noteTitle = noteView.findViewById(R.id.title_note_list_item);
+            TextView noteDescription = noteView.findViewById(R.id.description_note_list_item);
+            noteTitle.setText(note.getTitle());
+            noteDescription.setText(note.getDescription());
+            notesList.addView(noteView);
+        }
     }
 }
