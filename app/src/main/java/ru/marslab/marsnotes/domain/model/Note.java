@@ -1,29 +1,39 @@
 package ru.marslab.marsnotes.domain.model;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class Note {
 
+    private final int id;
     private String title;
     private String description;
-    private Long created;
-    private NoteCategory category;
+    private Date created;
+    private int categoryId;
     private NoteColor color;
+    private final SimpleDateFormat dateFormat =
+            new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+    private final SimpleDateFormat timeFormat =
+            new SimpleDateFormat("hh:mm", Locale.getDefault());
 
-    public Note(String title, String description, Long created, NoteCategory category, NoteColor color) {
+    public Note(int id, String title, String description, Date created, int categoryId, NoteColor color) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.created = created;
-        this.category = category;
+        this.categoryId = categoryId;
         this.color = color;
     }
 
-    public Note(String title, String description) {
+    public Note(int id, String title, String description) {
         this(
+                id,
                 title,
                 description,
-                new Date().getTime(),
-                new NoteCategory(NoteCategory.ID_NO_CATEGORY, NoteCategory.NO_CATEGORY),
+                Calendar.getInstance().getTime(),
+                NoteCategory.ID_NO_CATEGORY,
                 NoteColor.WHITE
         );
     }
@@ -44,20 +54,20 @@ public class Note {
         this.description = description;
     }
 
-    public Long getCreated() {
-        return created;
+    public String getDate() {
+        return dateFormat.format(created);
     }
 
-    public void setCreated(Long created) {
-        this.created = created;
+    public String getTime() {
+        return timeFormat.format(created);
     }
 
-    public NoteCategory getCategory() {
-        return category;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(NoteCategory category) {
-        this.category = category;
+    public void setCategory(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public NoteColor getColor() {
@@ -66,5 +76,9 @@ public class Note {
 
     public void setColor(NoteColor color) {
         this.color = color;
+    }
+
+    public int getId() {
+        return id;
     }
 }
