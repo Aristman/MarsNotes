@@ -3,10 +3,8 @@ package ru.marslab.marsnotes.ui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 
 import ru.marslab.marsnotes.R;
-import ru.marslab.marsnotes.domain.model.Note;
 
 public class NoteDetailsActivity extends AppCompatActivity {
 
@@ -20,7 +18,7 @@ public class NoteDetailsActivity extends AppCompatActivity {
             if (getIntent() != null) {
                 int noteId = getIntent().getIntExtra(NOTE_KEY, 1);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.note_details_fragment, NoteDetailsFragment.newInstance(noteId))
+                        .replace(R.id.note_fragment_container, NoteDetailsFragment.newInstance(noteId))
                         .commit();
             }
         }

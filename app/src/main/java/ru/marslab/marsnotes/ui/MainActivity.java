@@ -6,12 +6,11 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ru.marslab.marsnotes.R;
-import ru.marslab.marsnotes.domain.model.Note;
 
 import static ru.marslab.marsnotes.ui.NoteDetailsActivity.NOTE_KEY;
 
 
-public class MainActivity extends AppCompatActivity  implements NotesListFragment.OnNoteClicked {
+public class MainActivity extends AppCompatActivity implements NotesListFragment.OnNoteClicked {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,8 +20,14 @@ public class MainActivity extends AppCompatActivity  implements NotesListFragmen
 
     @Override
     public void onNoteClicked(int noteId) {
-        Intent intent = new Intent(this, NoteDetailsActivity.class);
-        intent.putExtra(NOTE_KEY, noteId);
-        startActivity(intent);
+        if (getResources().getBoolean(R.bool.isLandscape)) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.note_details_fragment, NoteDetailsFragment.newInstance(noteId))
+                    .commit();
+        } else {
+            Intent intent = new Intent(this, NoteDetailsActivity.class);
+            intent.putExtra(NOTE_KEY, noteId);
+            startActivity(intent);
+        }
     }
 }
