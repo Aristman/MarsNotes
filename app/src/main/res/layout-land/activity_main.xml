@@ -19,6 +19,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/note_details_fragment"
+        android:name="ru.marslab.marsnotes.ui.NoteDetailsFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

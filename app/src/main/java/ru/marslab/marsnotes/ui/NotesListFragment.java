@@ -21,28 +21,23 @@ import ru.marslab.marsnotes.domain.model.Note;
 
 public class NotesListFragment extends Fragment {
 
-    public interface OnNoteClicked {
-        void onNoteClicked(int noteId);
-    }
-
     private Repository repository;
 
-    private OnNoteClicked onNoteClicked;
+    private Publisher publisher;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        if (context instanceof OnNoteClicked) {
-            onNoteClicked = (OnNoteClicked) context;
+        if (context instanceof PublisherHolder) {
+            publisher = ((PublisherHolder) context).getPublisher();
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-
-        onNoteClicked = null;
+        publisher = null;
     }
 
     @Override
@@ -69,8 +64,8 @@ public class NotesListFragment extends Fragment {
                             .from(requireContext())
                             .inflate(R.layout.item_notes_list, notesList, false);
             noteView.setOnClickListener(v -> {
-                if (onNoteClicked != null) {
-                    onNoteClicked.onNoteClicked(note.getId());
+                if (publisher != null) {
+                    publisher.notify(note.getId());
                 }
             });
             TextView noteTitle = noteView.findViewById(R.id.title_note_list_item);

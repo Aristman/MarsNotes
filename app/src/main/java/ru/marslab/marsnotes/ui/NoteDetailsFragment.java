@@ -1,5 +1,6 @@
 package ru.marslab.marsnotes.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,16 +16,23 @@ import androidx.fragment.app.Fragment;
 
 import ru.marslab.marsnotes.App;
 import ru.marslab.marsnotes.R;
+import ru.marslab.marsnotes.domain.Observer;
 import ru.marslab.marsnotes.domain.Repository;
 import ru.marslab.marsnotes.domain.model.Note;
 
 import static ru.marslab.marsnotes.ui.NoteDetailsActivity.NOTE_KEY;
 
-public class NoteDetailsFragment extends Fragment {
+public class NoteDetailsFragment extends Fragment implements Observer {
 
 
     private Repository repository;
-    private Note note;
+    private Publisher publisher;
+
+    private TextView noteTitle;
+    private TextView noteDescription;
+    private Spinner category;
+    private EditText date;
+    private EditText time;
 
     public static NoteDetailsFragment newInstance(int noteId) {
         NoteDetailsFragment fragment = new NoteDetailsFragment();
@@ -54,12 +62,11 @@ public class NoteDetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        TextView noteTitle = view.findViewById(R.id.note_title);
-        TextView noteDescription = view.findViewById(R.id.note_description);
-        Spinner category = view.findViewById(R.id.note_category);
-        EditText date = view.findViewById(R.id.note_date);
-        EditText time = view.findViewById(R.id.note_time);
+        noteTitle = view.findViewById(R.id.note_title);
+        noteDescription = view.findViewById(R.id.note_description);
+        category = view.findViewById(R.id.note_category);
+        date = view.findViewById(R.id.note_date);
+        time = view.findViewById(R.id.note_time);
         view.findViewById(R.id.note_date_picker_btn).setOnClickListener(v -> {
             // TODO("Реализация клика по кнопке даты")
         });
@@ -71,15 +78,40 @@ public class NoteDetailsFragment extends Fragment {
             Note note = repository.getNote(
                     getArguments().getInt(NOTE_KEY)
             );
-            noteTitle.setText(note.getTitle());
-            noteDescription.setText(note.getDescription());
-            category.setAdapter(getCategoryListAdapter());
-            category.setSelection(note.getCategoryId());
-            date.setText(note.getDate());
-            time.setText(note.getTime());
-            view.setBackgroundColor(note.getColor().getColorId());
+            updateNoteInfo(note);
         }
 
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof PublisherHolder) {
+            publisher = ((PublisherHolder) context).getPublisher();
+            publisher.subscribe(this);
+        }
+
+    }
+
+    @Override
+    public void onDetach() {
+        if (publisher != null) {
+            publisher.unSubscribe(this);
+        }
+        super.onDetach();
+    }
+
+    private void updateNoteInfo(Note note) {
+        View view = this.getView();
+        noteTitle.setText(note.getTitle());
+        noteDescription.setText(note.getDescription());
+        category.setAdapter(getCategoryListAdapter());
+        category.setSelection(note.getCategoryId());
+        date.setText(note.getDate());
+        time.setText(note.getTime());
+        if (view != null) {
+            view.setBackgroundColor(note.getColor().getColorId());
+        }
     }
 
     private ArrayAdapter<String> getCategoryListAdapter() {
@@ -93,4 +125,8 @@ public class NoteDetailsFragment extends Fragment {
         return categoryAdapter;
     }
 
+    @Override
+    public void updateNoteId(int noteId) {
+        updateNoteInfo(repository.getNote(noteId));
+    }
 }
