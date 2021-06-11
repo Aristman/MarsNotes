@@ -58,6 +58,7 @@ public class Note {
 
     public void setDate(Date date) {
         this.created = date;
+        calendar.setTime(date);
     }
 
     public String getDate() {
@@ -70,6 +71,19 @@ public class Note {
 
     public Calendar getCalendar() {
         return calendar;
+    }
+
+    public void setCalendarDate(int year, int month, int day) {
+        calendar.set(year, month, day);
+        created = calendar.getTime();
+    }
+
+    public void setCalendarTime(int hour, int minute) {
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        calendar.set(year, month, day, hour, minute);
+        created = calendar.getTime();
     }
 
     public int getCategoryId() {

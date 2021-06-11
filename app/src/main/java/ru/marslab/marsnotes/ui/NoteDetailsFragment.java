@@ -76,34 +76,27 @@ public class NoteDetailsFragment extends Fragment implements Observer {
         date = view.findViewById(R.id.note_date);
         time = view.findViewById(R.id.note_time);
         view.findViewById(R.id.note_date_picker_btn).setOnClickListener(v -> {
-            Calendar calendar = note.getCalendar();
             DatePickerDialog dataPicker = new DatePickerDialog(
                     requireContext(),
                     (view1, year, month, dayOfMonth) -> {
-                        calendar.set(year, month, dayOfMonth);
-                        note.setDate(calendar.getTime());
+                        note.setCalendarDate(year, month, dayOfMonth);
                         updateNoteInfo();
                     },
-                    calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH),
-                    calendar.get(Calendar.DAY_OF_MONTH)
+                    note.getCalendar().get(Calendar.YEAR),
+                    note.getCalendar().get(Calendar.MONTH),
+                    note.getCalendar().get(Calendar.DAY_OF_MONTH)
             );
             dataPicker.show();
         });
         view.findViewById(R.id.note_time_picker_btn).setOnClickListener(v -> {
-            Calendar calendar = note.getCalendar();
             TimePickerDialog dataPicker = new TimePickerDialog(
                     requireContext(),
                     (view12, hourOfDay, minute) -> {
-                        int year = calendar.get(Calendar.YEAR);
-                        int month = calendar.get(Calendar.MONTH);
-                        int day = calendar.get(Calendar.DAY_OF_MONTH);
-                        calendar.set(year, month, day, hourOfDay, minute);
-                        note.setDate(calendar.getTime());
+                        note.setCalendarTime(hourOfDay, minute);
                         updateNoteInfo();
                     },
-                    calendar.get(Calendar.HOUR_OF_DAY),
-                    calendar.get(Calendar.MINUTE),
+                    note.getCalendar().get(Calendar.HOUR_OF_DAY),
+                    note.getCalendar().get(Calendar.MINUTE),
                     true
             );
             dataPicker.show();
