@@ -1,4 +1,4 @@
-package ru.marslab.marsnotes.ui;
+package ru.marslab.marsnotes.domain;
 
 public interface PublisherHolder {
 

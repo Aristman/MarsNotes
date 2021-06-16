@@ -1,17 +1,15 @@
 package ru.marslab.marsnotes.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import ru.marslab.marsnotes.R;
-import ru.marslab.marsnotes.domain.Observer;
+import ru.marslab.marsnotes.domain.Publisher;
+import ru.marslab.marsnotes.domain.PublisherHolder;
 
-import static ru.marslab.marsnotes.ui.NoteDetailsActivity.NOTE_KEY;
 
-
-public class MainActivity extends AppCompatActivity implements PublisherHolder, Observer {
+public class MainActivity extends AppCompatActivity implements PublisherHolder {
 
     private final Publisher publisher = new Publisher();
 
@@ -19,7 +17,6 @@ public class MainActivity extends AppCompatActivity implements PublisherHolder, 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        publisher.subscribe(this);
     }
 
 
@@ -28,12 +25,4 @@ public class MainActivity extends AppCompatActivity implements PublisherHolder, 
         return publisher;
     }
 
-    @Override
-    public void updateNoteId(int noteId) {
-        if (!getResources().getBoolean(R.bool.isLandscape)) {
-            Intent intent = new Intent(this, NoteDetailsActivity.class);
-            intent.putExtra(NOTE_KEY, noteId);
-            startActivity(intent);
-        }
-    }
 }

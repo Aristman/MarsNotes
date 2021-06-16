@@ -6,4 +6,10 @@
     <string name="node_time_title_text">Время заметки</string>
     <string name="date_image_description">Date picker</string>
     <string name="time_image_description">Time picker</string>
+    <string name="about_program">Информация О программе</string>
+    <string name="settings_string">Настройки</string>
+    <string name="menu_item_new_note">Новая заметка</string>
+    <string name="menu_item_edit_note">Изменить заметку</string>
+    <string name="menu_item_delete_note">Удалить заметку</string>
+    <string name="menu_item_about">О программе</string>
 </resources>

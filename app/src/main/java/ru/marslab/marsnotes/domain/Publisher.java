@@ -1,4 +1,4 @@
-package ru.marslab.marsnotes.ui;
+package ru.marslab.marsnotes.domain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import ru.marslab.marsnotes.domain.Observer;
 
 public class Publisher {
 
-    private List<Observer> observers = new ArrayList<>();
+    private final List<Observer> observers = new ArrayList<>();
 
     public void subscribe(Observer observer) {
         observers.add(observer);

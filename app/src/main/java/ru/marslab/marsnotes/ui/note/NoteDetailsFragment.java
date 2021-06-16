@@ -1,4 +1,4 @@
-package ru.marslab.marsnotes.ui;
+package ru.marslab.marsnotes.ui.note;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -25,11 +25,13 @@ import ru.marslab.marsnotes.R;
 import ru.marslab.marsnotes.domain.Observer;
 import ru.marslab.marsnotes.domain.Repository;
 import ru.marslab.marsnotes.domain.model.Note;
+import ru.marslab.marsnotes.domain.Publisher;
+import ru.marslab.marsnotes.domain.PublisherHolder;
 
-import static ru.marslab.marsnotes.ui.NoteDetailsActivity.NOTE_KEY;
 
 public class NoteDetailsFragment extends Fragment implements Observer {
 
+    private static final String NOTE_KEY = "note_key";
 
     private Repository repository;
     private Publisher publisher;

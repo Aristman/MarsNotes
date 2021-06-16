@@ -1,4 +1,4 @@
-package ru.marslab.marsnotes.ui;
+package ru.marslab.marsnotes.ui.note;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -18,6 +18,8 @@ import ru.marslab.marsnotes.App;
 import ru.marslab.marsnotes.R;
 import ru.marslab.marsnotes.domain.Repository;
 import ru.marslab.marsnotes.domain.model.Note;
+import ru.marslab.marsnotes.domain.Publisher;
+import ru.marslab.marsnotes.domain.PublisherHolder;
 
 public class NotesListFragment extends Fragment {
 
@@ -56,7 +58,7 @@ public class NotesListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        LinearLayout notesList = view.findViewById(R.id.notes_list_container);
+        LinearLayout notesList = view.findViewById(R.id.notes_list);
         List<Note> notes = repository.getNotes();
         for (Note note : notes) {
             View noteView =
@@ -66,6 +68,12 @@ public class NotesListFragment extends Fragment {
             noteView.setOnClickListener(v -> {
                 if (publisher != null) {
                     publisher.notify(note.getId());
+                }
+                if (!getResources().getBoolean(R.bool.isLandscape)) {
+                    getParentFragmentManager().beginTransaction()
+                            .replace(R.id.main_fragment_container, NoteDetailsFragment.newInstance(note.getId()), null)
+                            .addToBackStack(null)
+                            .commit();
                 }
             });
             TextView noteTitle = noteView.findViewById(R.id.title_note_list_item);
