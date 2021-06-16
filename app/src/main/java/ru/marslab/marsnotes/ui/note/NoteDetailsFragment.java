@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import java.util.Calendar;
@@ -42,6 +43,7 @@ public class NoteDetailsFragment extends Fragment implements Observer {
     private Spinner category;
     private EditText date;
     private EditText time;
+    private CardView noteDescriptionCard;
 
     public static NoteDetailsFragment newInstance(int noteId) {
         NoteDetailsFragment fragment = new NoteDetailsFragment();
@@ -77,6 +79,7 @@ public class NoteDetailsFragment extends Fragment implements Observer {
         category = view.findViewById(R.id.note_category);
         date = view.findViewById(R.id.note_date);
         time = view.findViewById(R.id.note_time);
+        noteDescriptionCard = view.findViewById(R.id.note_description_card);
         view.findViewById(R.id.note_date_picker_btn).setOnClickListener(v -> {
             DatePickerDialog dataPicker = new DatePickerDialog(
                     requireContext(),
@@ -139,8 +142,10 @@ public class NoteDetailsFragment extends Fragment implements Observer {
         category.setSelection(note.getCategoryId());
         date.setText(note.getDate());
         time.setText(note.getTime());
+        noteDescriptionCard.setCardBackgroundColor(note.getColor().getColorId());
         if (view != null) {
             view.setBackgroundColor(note.getColor().getColorId());
+
         }
     }
 

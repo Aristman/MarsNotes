@@ -22,15 +22,29 @@ public class RepositoryImpl implements Repository {
         categories.add(new NoteCategory(id++, "Категория 3"));
         categories.add(new NoteCategory(id, "Категория 4"));
         id = 1;
-        notes.add(new Note(id++, "Запись 1", "описание записки номер 1"));
+        notes.add(new Note(
+                id++,
+                "Запись 1",
+                "описание записки номер 1",
+                Calendar.getInstance().getTime(),
+                1,
+                NoteColor.RED));
         notes.add(new Note(
                 id++,
                 "Запись 2",
-                "описание записки номер 2",
+                "описание sdfad asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasd fasdfasdf" +
+                        "asdfasdf asdfasdf asdfasdf asdfa sdf asdfasdfasdf asdfasdfas df asdfasd fasd f asdf" +
+                        "asdfasdf asdfasdf assdfasdf asdfasdf asdf   dsa f a sdf as dfasdfas записки номер 2",
                 Calendar.getInstance().getTime(),
                  2,
                 NoteColor.YELLOW));
-        notes.add(new Note(id, "Запись 3", "описание записки номер 3"));
+        notes.add(new Note(
+                id,
+                "Запись 3",
+                "описание записки номер 3",
+                Calendar.getInstance().getTime(),
+                3,
+                NoteColor.VIOLET));
     }
 
     @Override

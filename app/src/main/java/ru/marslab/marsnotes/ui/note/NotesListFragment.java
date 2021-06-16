@@ -65,6 +65,7 @@ public class NotesListFragment extends Fragment {
                     LayoutInflater
                             .from(requireContext())
                             .inflate(R.layout.item_notes_list, notesList, false);
+            noteView.setBackgroundColor(note.getColor().getColorId());
             noteView.setOnClickListener(v -> {
                 if (publisher != null) {
                     publisher.notify(note.getId());
@@ -76,8 +77,8 @@ public class NotesListFragment extends Fragment {
                             .commit();
                 }
             });
-            TextView noteTitle = noteView.findViewById(R.id.title_note_list_item);
-            TextView noteDescription = noteView.findViewById(R.id.description_note_list_item);
+            TextView noteTitle = noteView.findViewById(R.id.item_notes_list_title);
+            TextView noteDescription = noteView.findViewById(R.id.item_notes_list_description);
             noteTitle.setText(note.getTitle());
             noteDescription.setText(note.getDescription());
             notesList.addView(noteView);
