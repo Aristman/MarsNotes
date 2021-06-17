@@ -12,4 +12,8 @@
     <string name="menu_item_edit_note">Изменить заметку</string>
     <string name="menu_item_delete_note">Удалить заметку</string>
     <string name="menu_item_about">О программе</string>
+    <string name="note_image_description">note image</string>
+    <string name="drawer_image_description">Header navigation image</string>
+    <string name="date_hint">Дата</string>
+    <string name="time_hint">Время</string>
 </resources>

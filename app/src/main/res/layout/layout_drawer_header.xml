@@ -7,6 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="128dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/canvas_360_640"/>
+        android:src="@drawable/canvas_360_640"
+        android:contentDescription="@string/drawer_image_description" />
 
 </FrameLayout>

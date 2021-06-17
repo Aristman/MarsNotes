@@ -23,7 +23,8 @@
         android:layout_marginTop="@dimen/space_16dp"
         android:src="@drawable/notes"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/note_title" />
+        app:layout_constraintTop_toBottomOf="@id/note_title"
+        android:contentDescription="@string/note_image_description" />
 
     <Spinner
         android:id="@+id/note_category"
@@ -55,6 +56,7 @@
         android:layout_height="wrap_content"
         android:importantForAutofill="no"
         android:inputType="date"
+        android:hint="@string/date_hint"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
         app:layout_constraintBottom_toBottomOf="@id/note_image"
         app:layout_constraintStart_toEndOf="@id/note_date_picker_btn"
@@ -67,6 +69,7 @@
         android:importantForAutofill="no"
         android:inputType="time"
         android:textAlignment="textEnd"
+        android:hint="@string/time_hint"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
         app:layout_constraintBottom_toBottomOf="@id/note_image"
         app:layout_constraintEnd_toStartOf="@id/note_time_picker_btn"

@@ -19,7 +19,6 @@ public class AboutFragment extends Fragment {
             @NonNull LayoutInflater inflater,
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_about, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_about, container, false);
     }
 }
