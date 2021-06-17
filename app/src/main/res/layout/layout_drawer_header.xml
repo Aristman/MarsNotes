@@ -9,7 +9,7 @@
         android:layout_width="@dimen/drawer_header_image_size"
         android:layout_height="@dimen/drawer_header_image_size"
         android:scaleType="centerCrop"
-        android:src="@drawable/canvas_360_640"
+        android:src="@drawable/marslab_logo2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
