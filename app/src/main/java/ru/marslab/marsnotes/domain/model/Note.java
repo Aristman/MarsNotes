@@ -36,7 +36,7 @@ public class Note {
                 description,
                 Calendar.getInstance().getTime(),
                 NoteCategory.ID_NO_CATEGORY,
-                NoteColor.WHITE
+                NoteColor.YELLOW
         );
     }
 

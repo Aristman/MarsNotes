@@ -1,7 +1,12 @@
 package ru.marslab.marsnotes.ui;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -20,18 +25,39 @@ import ru.marslab.marsnotes.ui.settings.SettingsFragment;
 public class MainActivity extends AppCompatActivity implements PublisherHolder {
 
     private final Publisher publisher = new Publisher();
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav_drawer);
+        initToolbar();
         initDrawer();
+    }
+
+    private void initToolbar() {
+        toolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.notes_list_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.new_note) {
+            // TODO ("добавление новой заметки")
+            Toast.makeText(this, "New Note!!!!", Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initDrawer() {
         DrawerLayout drawer = findViewById(R.id.drawer_main_layout);
-
-        Toolbar toolbar = findViewById(R.id.main_toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this,
@@ -51,13 +77,15 @@ public class MainActivity extends AppCompatActivity implements PublisherHolder {
                         .replace(R.id.main_fragment_container, new AboutFragment())
                         .addToBackStack(null)
                         .commit();
+                return true;
             } else if (item.getItemId() == R.id.settings) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.main_fragment_container, new SettingsFragment())
                         .addToBackStack(null)
                         .commit();
+                return true;
             }
-            return true;
+            return false;
         });
     }
 

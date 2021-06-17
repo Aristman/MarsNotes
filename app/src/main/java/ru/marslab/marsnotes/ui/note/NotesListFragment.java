@@ -6,7 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -76,6 +78,23 @@ public class NotesListFragment extends Fragment {
                             .addToBackStack(null)
                             .commit();
                 }
+            });
+            noteView.setOnLongClickListener(v -> {
+                PopupMenu popupMenu = new PopupMenu(requireContext(), v);
+                popupMenu.inflate(R.menu.notes_list_item_popup_menu);
+                popupMenu.setOnMenuItemClickListener(item -> {
+                    int id = item.getItemId();
+                    if (id == R.id.edit_note) {
+                        // TODO ("Редактирование заметки")
+                        Toast.makeText(requireContext(), "Edit Note", Toast.LENGTH_SHORT).show();
+                    } else if (id == R.id.delete_note) {
+                        // TODO ("Удаление заметки")
+                        Toast.makeText(requireContext(), "Delete Note", Toast.LENGTH_SHORT).show();
+                    }
+                    return false;
+                });
+                popupMenu.show();
+                return true;
             });
             TextView noteTitle = noteView.findViewById(R.id.item_notes_list_title);
             TextView noteDescription = noteView.findViewById(R.id.item_notes_list_description);

@@ -16,4 +16,8 @@
     <string name="drawer_image_description">Header navigation image</string>
     <string name="date_hint">Дата</string>
     <string name="time_hint">Время</string>
+    <string name="save_string">Сохранить</string>
+    <string name="cancel_string">Отмена</string>
+    <string name="dreawer_header_title_text">Записки марсианина</string>
+    <string name="dreawer_header_text">Примерный текст для заголовка бокового меню</string>
 </resources>
