@@ -1,4 +1,4 @@
-package ru.marslab.marsnotes.ui;
+package ru.marslab.marsnotes.ui.note;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -6,16 +6,21 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import java.util.Calendar;
@@ -25,11 +30,13 @@ import ru.marslab.marsnotes.R;
 import ru.marslab.marsnotes.domain.Observer;
 import ru.marslab.marsnotes.domain.Repository;
 import ru.marslab.marsnotes.domain.model.Note;
+import ru.marslab.marsnotes.domain.Publisher;
+import ru.marslab.marsnotes.domain.PublisherHolder;
 
-import static ru.marslab.marsnotes.ui.NoteDetailsActivity.NOTE_KEY;
 
 public class NoteDetailsFragment extends Fragment implements Observer {
 
+    private static final String NOTE_KEY = "note_key";
 
     private Repository repository;
     private Publisher publisher;
@@ -40,6 +47,7 @@ public class NoteDetailsFragment extends Fragment implements Observer {
     private Spinner category;
     private EditText date;
     private EditText time;
+    private CardView noteDescriptionCard;
 
     public static NoteDetailsFragment newInstance(int noteId) {
         NoteDetailsFragment fragment = new NoteDetailsFragment();
@@ -53,7 +61,25 @@ public class NoteDetailsFragment extends Fragment implements Observer {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         repository = App.getRepository();
+        setHasOptionsMenu(true);
+    }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.notes_list_item_popup_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.edit_note) {
+            Toast.makeText(requireContext(), "Edit this Note...", Toast.LENGTH_SHORT).show();
+            // TODO ("Изменение открытой заметки")
+        } else if (id == R.id.delete_note) {
+            Toast.makeText(requireContext(), "Delete this Note...", Toast.LENGTH_SHORT).show();
+            // TODO ("Удаление открытой заметки")
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Nullable
@@ -75,6 +101,7 @@ public class NoteDetailsFragment extends Fragment implements Observer {
         category = view.findViewById(R.id.note_category);
         date = view.findViewById(R.id.note_date);
         time = view.findViewById(R.id.note_time);
+        noteDescriptionCard = view.findViewById(R.id.note_description_card);
         view.findViewById(R.id.note_date_picker_btn).setOnClickListener(v -> {
             DatePickerDialog dataPicker = new DatePickerDialog(
                     requireContext(),
@@ -137,8 +164,10 @@ public class NoteDetailsFragment extends Fragment implements Observer {
         category.setSelection(note.getCategoryId());
         date.setText(note.getDate());
         time.setText(note.getTime());
+        noteDescriptionCard.setCardBackgroundColor(note.getColor().getColorId());
         if (view != null) {
             view.setBackgroundColor(note.getColor().getColorId());
+
         }
     }
 

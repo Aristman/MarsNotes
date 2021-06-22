@@ -6,4 +6,18 @@
     <string name="node_time_title_text">Время заметки</string>
     <string name="date_image_description">Date picker</string>
     <string name="time_image_description">Time picker</string>
+    <string name="about_program">Информация О программе</string>
+    <string name="settings_string">Настройки</string>
+    <string name="menu_item_new_note">Новая заметка</string>
+    <string name="menu_item_edit_note">Изменить заметку</string>
+    <string name="menu_item_delete_note">Удалить заметку</string>
+    <string name="menu_item_about">О программе</string>
+    <string name="note_image_description">note image</string>
+    <string name="drawer_image_description">Header navigation image</string>
+    <string name="date_hint">Дата</string>
+    <string name="time_hint">Время</string>
+    <string name="save_string">Сохранить</string>
+    <string name="cancel_string">Отмена</string>
+    <string name="dreawer_header_title_text">Записки марсианина</string>
+    <string name="dreawer_header_text">Примерный текст для заголовка бокового меню</string>
 </resources>

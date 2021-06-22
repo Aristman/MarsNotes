@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="padding_item_list">8dp</dimen>
+    <dimen name="space_8dp">8dp</dimen>
+    <dimen name="space_16dp">16dp</dimen>
+    <dimen name="elevation_item">5dp</dimen>
+    <dimen name="image_preview">54dp</dimen>
+    <dimen name="item_notes_list_height">96dp</dimen>
+    <dimen name="space_12dp">12dp</dimen>
+    <dimen name="note_image_view">128dp</dimen>
+    <dimen name="space_24dp">24dp</dimen>
+    <dimen name="drawer_header_image_size">128dp</dimen>
 </resources>
