@@ -5,29 +5,35 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.PopupMenu;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
-
-import java.util.List;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import ru.marslab.marsnotes.App;
 import ru.marslab.marsnotes.R;
 import ru.marslab.marsnotes.domain.Repository;
-import ru.marslab.marsnotes.domain.model.Note;
 import ru.marslab.marsnotes.domain.Publisher;
 import ru.marslab.marsnotes.domain.PublisherHolder;
+import ru.marslab.marsnotes.domain.model.Note;
+import ru.marslab.marsnotes.ui.FragmentRouterHolder;
+import ru.marslab.marsnotes.ui.MainActivity;
 
 public class NotesListFragment extends Fragment {
+
+    public static final String TAG = "NotesListFragment";
 
     private Repository repository;
 
     private Publisher publisher;
+
+    public static NotesListFragment newInstance() {
+        return new NotesListFragment();
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -59,27 +65,24 @@ public class NotesListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        LinearLayout notesList = view.findViewById(R.id.notes_list);
-        List<Note> notes = repository.getNotes();
-        for (Note note : notes) {
-            View noteView =
-                    LayoutInflater
-                            .from(requireContext())
-                            .inflate(R.layout.item_notes_list, notesList, false);
-            noteView.setBackgroundColor(note.getColor().getColorId());
-            noteView.setOnClickListener(v -> {
+        RecyclerView notesList = view.findViewById(R.id.notes_list_rv);
+        notesList.setLayoutManager(new LinearLayoutManager(requireContext()));
+        NotesAdapter notesListAdapter = new NotesAdapter();
+        notesListAdapter.setNoteClickListeners(new NotesAdapter.OnNoteClickListener() {
+            @Override
+            public void onClickListener(@NonNull Note note) {
                 if (publisher != null) {
                     publisher.notify(note.getId());
                 }
                 if (!getResources().getBoolean(R.bool.isLandscape)) {
-                    getParentFragmentManager().beginTransaction()
-                            .replace(R.id.main_fragment_container, NoteDetailsFragment.newInstance(note.getId()), null)
-                            .addToBackStack(null)
-                            .commit();
+                    if (requireActivity() instanceof FragmentRouterHolder) {
+                        ((FragmentRouterHolder) requireActivity()).getRouter().showDetailsNote(note.getId());
+                    }
                 }
-            });
-            noteView.setOnLongClickListener(v -> {
+            }
+
+            @Override
+            public void onLongClickListener(@NonNull Note note, View v) {
                 PopupMenu popupMenu = new PopupMenu(requireContext(), v);
                 popupMenu.inflate(R.menu.notes_list_item_popup_menu);
                 popupMenu.setOnMenuItemClickListener(item -> {
@@ -94,13 +97,9 @@ public class NotesListFragment extends Fragment {
                     return false;
                 });
                 popupMenu.show();
-                return true;
-            });
-            TextView noteTitle = noteView.findViewById(R.id.item_notes_list_title);
-            TextView noteDescription = noteView.findViewById(R.id.item_notes_list_description);
-            noteTitle.setText(note.getTitle());
-            noteDescription.setText(note.getDescription());
-            notesList.addView(noteView);
-        }
+            }
+        });
+        notesList.setAdapter(notesListAdapter);
+        notesListAdapter.setListNotes(repository.getNotes());
     }
 }
