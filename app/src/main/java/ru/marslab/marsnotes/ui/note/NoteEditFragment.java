@@ -28,13 +28,13 @@ import java.util.Calendar;
 import ru.marslab.marsnotes.App;
 import ru.marslab.marsnotes.R;
 import ru.marslab.marsnotes.domain.Observer;
-import ru.marslab.marsnotes.domain.Repository;
-import ru.marslab.marsnotes.domain.model.Note;
 import ru.marslab.marsnotes.domain.Publisher;
 import ru.marslab.marsnotes.domain.PublisherHolder;
+import ru.marslab.marsnotes.domain.Repository;
+import ru.marslab.marsnotes.domain.model.Note;
 
 
-public class NoteDetailsFragment extends Fragment implements Observer {
+public class NoteEditFragment extends Fragment implements Observer {
 
     private static final String NOTE_KEY = "note_key";
     public static final String TAG = "NoteDetailsFragment";
@@ -50,8 +50,8 @@ public class NoteDetailsFragment extends Fragment implements Observer {
     private EditText time;
     private CardView noteDescriptionCard;
 
-    public static NoteDetailsFragment newInstance(int noteId) {
-        NoteDetailsFragment fragment = new NoteDetailsFragment();
+    public static NoteEditFragment newInstance(int noteId) {
+        NoteEditFragment fragment = new NoteEditFragment();
         Bundle argsBundle = new Bundle();
         argsBundle.putInt(NOTE_KEY, noteId);
         fragment.setArguments(argsBundle);

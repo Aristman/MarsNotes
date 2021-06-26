@@ -18,8 +18,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     public interface OnNoteClickListener {
         void onClickListener(@NonNull Note note);
-
-        void onLongClickListener(@NonNull Note note, View view);
     }
 
     private List<Note> notes;
@@ -73,9 +71,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                 }
             });
             itemView.setOnLongClickListener(v -> {
-                if (getNoteClickListener() != null) {
-                    getNoteClickListener().onLongClickListener(notes.get(getAdapterPosition()), itemView);
-                }
                 return true;
             });
             noteCard = itemView.findViewById(R.id.note_card);

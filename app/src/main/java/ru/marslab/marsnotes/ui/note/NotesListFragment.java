@@ -68,35 +68,31 @@ public class NotesListFragment extends Fragment {
         RecyclerView notesList = view.findViewById(R.id.notes_list_rv);
         notesList.setLayoutManager(new LinearLayoutManager(requireContext()));
         NotesAdapter notesListAdapter = new NotesAdapter();
-        notesListAdapter.setNoteClickListeners(new NotesAdapter.OnNoteClickListener() {
-            @Override
-            public void onClickListener(@NonNull Note note) {
-                if (publisher != null) {
-                    publisher.notify(note.getId());
-                }
-                if (!getResources().getBoolean(R.bool.isLandscape)) {
-                    if (requireActivity() instanceof FragmentRouterHolder) {
-                        ((FragmentRouterHolder) requireActivity()).getRouter().showDetailsNote(note.getId());
-                    }
-                }
+        //            @Override
+//            public void onLongClickListener(@NonNull Note note, View v) {
+//                PopupMenu popupMenu = new PopupMenu(requireContext(), v);
+//                popupMenu.inflate(R.menu.notes_list_item_popup_menu);
+//                popupMenu.setOnMenuItemClickListener(item -> {
+//                    int id = item.getItemId();
+//                    if (id == R.id.edit_note) {
+//                        // TODO ("Редактирование заметки")
+//                        Toast.makeText(requireContext(), "Edit Note", Toast.LENGTH_SHORT).show();
+//                    } else if (id == R.id.delete_note) {
+//                        // TODO ("Удаление заметки")
+//                        Toast.makeText(requireContext(), "Delete Note", Toast.LENGTH_SHORT).show();
+//                    }
+//                    return false;
+//                });
+//                popupMenu.show();
+//            }
+        notesListAdapter.setNoteClickListeners(note -> {
+            if (publisher != null) {
+                publisher.notify(note.getId());
             }
-
-            @Override
-            public void onLongClickListener(@NonNull Note note, View v) {
-                PopupMenu popupMenu = new PopupMenu(requireContext(), v);
-                popupMenu.inflate(R.menu.notes_list_item_popup_menu);
-                popupMenu.setOnMenuItemClickListener(item -> {
-                    int id = item.getItemId();
-                    if (id == R.id.edit_note) {
-                        // TODO ("Редактирование заметки")
-                        Toast.makeText(requireContext(), "Edit Note", Toast.LENGTH_SHORT).show();
-                    } else if (id == R.id.delete_note) {
-                        // TODO ("Удаление заметки")
-                        Toast.makeText(requireContext(), "Delete Note", Toast.LENGTH_SHORT).show();
-                    }
-                    return false;
-                });
-                popupMenu.show();
+            if (!getResources().getBoolean(R.bool.isLandscape)) {
+                if (requireActivity() instanceof FragmentRouterHolder) {
+                    ((FragmentRouterHolder) requireActivity()).getRouter().showDetailsNote(note.getId());
+                }
             }
         });
         notesList.setAdapter(notesListAdapter);
