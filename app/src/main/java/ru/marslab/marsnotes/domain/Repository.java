@@ -11,9 +11,11 @@ public interface Repository {
 
     List<NoteCategory> getCategories();
 
-    Note getNote(int noteId);
-
     List<String> getCategoryNames();
 
     NoteCategory getCategory(int categoryId);
+
+    void deleteNote(int deleteIndex);
+
+    void deleteNote(Note note);
 }

@@ -3,6 +3,7 @@ package ru.marslab.marsnotes.ui;
 import androidx.fragment.app.FragmentManager;
 
 import ru.marslab.marsnotes.R;
+import ru.marslab.marsnotes.domain.model.Note;
 import ru.marslab.marsnotes.ui.about.AboutFragment;
 import ru.marslab.marsnotes.ui.note.NoteDetailsFragment;
 import ru.marslab.marsnotes.ui.note.NotesListFragment;
@@ -26,11 +27,11 @@ public class FragmentRouter {
                 .commit();
     }
 
-    public void showDetailsNote(int noteId) {
+    public void showDetailsNote(Note note) {
         fragmentManager.beginTransaction()
                 .replace(
                         R.id.main_fragment_container,
-                        NoteDetailsFragment.newInstance(noteId),
+                        NoteDetailsFragment.newInstance(note),
                         NoteDetailsFragment.TAG
                 )
                 .addToBackStack(NoteDetailsFragment.TAG)

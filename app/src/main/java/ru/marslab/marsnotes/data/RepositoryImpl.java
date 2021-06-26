@@ -57,15 +57,6 @@ public class RepositoryImpl implements Repository {
         return categories;
     }
 
-    @Override
-    public Note getNote(int noteId) {
-        for (Note note : notes) {
-            if (note.getId() == noteId) {
-                return note;
-            }
-        }
-        return null;
-    }
 
     @Override
     public List<String> getCategoryNames() {
@@ -84,6 +75,16 @@ public class RepositoryImpl implements Repository {
             }
         }
         return NoteCategory.getInstance();
+    }
+
+    @Override
+    public void deleteNote(int deleteIndex) {
+        notes.remove(deleteIndex);
+    }
+
+    @Override
+    public void deleteNote(Note note) {
+        notes.remove(note);
     }
 
 }

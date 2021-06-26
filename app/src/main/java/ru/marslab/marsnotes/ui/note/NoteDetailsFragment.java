@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 
 import java.util.Calendar;
 
@@ -50,10 +51,10 @@ public class NoteDetailsFragment extends Fragment implements Observer {
     private EditText time;
     private CardView noteDescriptionCard;
 
-    public static NoteDetailsFragment newInstance(int noteId) {
+    public static NoteDetailsFragment newInstance(Note note) {
         NoteDetailsFragment fragment = new NoteDetailsFragment();
         Bundle argsBundle = new Bundle();
-        argsBundle.putInt(NOTE_KEY, noteId);
+        argsBundle.putParcelable(NOTE_KEY, note);
         fragment.setArguments(argsBundle);
         return fragment;
     }
@@ -107,9 +108,7 @@ public class NoteDetailsFragment extends Fragment implements Observer {
         view.findViewById(R.id.note_time_picker_btn).setOnClickListener(v -> showTimePicker());
 
         if (getArguments() != null) {
-            note = repository.getNote(
-                    getArguments().getInt(NOTE_KEY)
-            );
+            note = getArguments().getParcelable(NOTE_KEY);
             updateNoteInfo();
         }
 
@@ -188,8 +187,8 @@ public class NoteDetailsFragment extends Fragment implements Observer {
     }
 
     @Override
-    public void updateNoteById(int noteId) {
-        note = repository.getNote(noteId);
+    public void updateNote(Note note) {
+        this.note = note;
         updateNoteInfo();
     }
 }

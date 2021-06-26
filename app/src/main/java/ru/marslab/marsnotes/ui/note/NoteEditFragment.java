@@ -107,9 +107,7 @@ public class NoteEditFragment extends Fragment implements Observer {
         view.findViewById(R.id.note_time_picker_btn).setOnClickListener(v -> showTimePicker());
 
         if (getArguments() != null) {
-            note = repository.getNote(
-                    getArguments().getInt(NOTE_KEY)
-            );
+            note = getArguments().getParcelable(NOTE_KEY);
             updateNoteInfo();
         }
 
@@ -188,8 +186,8 @@ public class NoteEditFragment extends Fragment implements Observer {
     }
 
     @Override
-    public void updateNoteById(int noteId) {
-        note = repository.getNote(noteId);
+    public void updateNote(Note note) {
+        this.note = note;
         updateNoteInfo();
     }
 }

@@ -1,16 +1,19 @@
 package ru.marslab.marsnotes.domain.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class Note {
+public class Note implements Parcelable {
 
     private final int id;
     private String title;
     private String description;
-    private Date created;
+    private Date date;
     private Calendar calendar = Calendar.getInstance();
     private int categoryId;
     private NoteColor color;
@@ -23,7 +26,7 @@ public class Note {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.created = created;
+        this.date = created;
         calendar.setTime(created);
         this.categoryId = categoryId;
         this.color = color;
@@ -39,6 +42,28 @@ public class Note {
                 NoteColor.YELLOW
         );
     }
+
+    protected Note(Parcel in) {
+        id = in.readInt();
+        title = in.readString();
+        description = in.readString();
+        categoryId = in.readInt();
+        date.setTime(in.readLong());
+        color = NoteColor.valueOf(in.readString());
+        calendar.setTime(date);
+    }
+
+    public static final Creator<Note> CREATOR = new Creator<Note>() {
+        @Override
+        public Note createFromParcel(Parcel in) {
+            return new Note(in);
+        }
+
+        @Override
+        public Note[] newArray(int size) {
+            return new Note[size];
+        }
+    };
 
     public String getTitle() {
         return title;
@@ -57,16 +82,16 @@ public class Note {
     }
 
     public void setDate(Date date) {
-        this.created = date;
+        this.date = date;
         calendar.setTime(date);
     }
 
     public String getDate() {
-        return dateFormat.format(created);
+        return dateFormat.format(date);
     }
 
     public String getTime() {
-        return timeFormat.format(created);
+        return timeFormat.format(date);
     }
 
     public Calendar getCalendar() {
@@ -75,7 +100,7 @@ public class Note {
 
     public void setCalendarDate(int year, int month, int day) {
         calendar.set(year, month, day);
-        created = calendar.getTime();
+        date = calendar.getTime();
     }
 
     public void setCalendarTime(int hour, int minute) {
@@ -83,7 +108,7 @@ public class Note {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         calendar.set(year, month, day, hour, minute);
-        created = calendar.getTime();
+        date = calendar.getTime();
     }
 
     public int getCategoryId() {
@@ -104,5 +129,20 @@ public class Note {
 
     public int getId() {
         return id;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(title);
+        dest.writeString(description);
+        dest.writeInt(categoryId);
+        dest.writeLong(date.getTime());
+        dest.writeString(color.name());
     }
 }
