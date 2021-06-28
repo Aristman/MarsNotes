@@ -47,8 +47,8 @@ public class NoteDetailsFragment extends Fragment implements Observer {
     private TextView noteTitle;
     private TextView noteDescription;
     private Spinner category;
-    private EditText date;
-    private EditText time;
+    private TextView date;
+    private TextView time;
     private CardView noteDescriptionCard;
 
     public static NoteDetailsFragment newInstance(Note note) {
@@ -104,8 +104,8 @@ public class NoteDetailsFragment extends Fragment implements Observer {
         date = view.findViewById(R.id.note_date);
         time = view.findViewById(R.id.note_time);
         noteDescriptionCard = view.findViewById(R.id.note_description_card);
-        view.findViewById(R.id.note_date_picker_btn).setOnClickListener(v -> showDataPicker());
-        view.findViewById(R.id.note_time_picker_btn).setOnClickListener(v -> showTimePicker());
+        view.findViewById(R.id.note_date).setOnClickListener(v -> showDataPicker());
+        view.findViewById(R.id.note_time).setOnClickListener(v -> showTimePicker());
 
         if (getArguments() != null) {
             note = getArguments().getParcelable(NOTE_KEY);

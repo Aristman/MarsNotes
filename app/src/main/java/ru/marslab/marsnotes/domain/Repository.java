@@ -7,7 +7,7 @@ import ru.marslab.marsnotes.domain.model.NoteCategory;
 
 public interface Repository {
 
-    List<Note> getNotes();
+    void getNotes(Callback<List<Note>> callback);
 
     List<NoteCategory> getCategories();
 

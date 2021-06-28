@@ -17,8 +17,11 @@ import androidx.fragment.app.FragmentContainerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
 import ru.marslab.marsnotes.App;
 import ru.marslab.marsnotes.R;
+import ru.marslab.marsnotes.domain.Callback;
 import ru.marslab.marsnotes.domain.Repository;
 import ru.marslab.marsnotes.domain.Publisher;
 import ru.marslab.marsnotes.domain.PublisherHolder;
@@ -92,7 +95,7 @@ public class NotesListFragment extends Fragment {
 //            }
         initNotesListAdapter();
         notesList.setAdapter(notesListAdapter);
-        notesListAdapter.setListNotes(repository.getNotes());
+        repository.getNotes(result -> notesListAdapter.setListNotes(result));
     }
 
     private void initNotesListAdapter() {
@@ -124,11 +127,11 @@ public class NotesListFragment extends Fragment {
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId()== R.id.edit_note) {
+        if (item.getItemId() == R.id.edit_note) {
             // TODO ("Обработка изменения записи")
-            Toast.makeText(requireContext(), noteOnLongClicked.getTitle()+" Edit", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), noteOnLongClicked.getTitle() + " Edit", Toast.LENGTH_SHORT).show();
         }
-        if (item.getItemId()== R.id.delete_note) {
+        if (item.getItemId() == R.id.delete_note) {
             repository.deleteNote(noteOnLongClicked);
             notesListAdapter.deleteNote(noteOnLongClicked);
             notesListAdapter.notifyItemRemoved(noteIndexOnLongClicked);
