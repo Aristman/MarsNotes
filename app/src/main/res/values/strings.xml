@@ -21,4 +21,5 @@
     <string name="dreawer_header_title_text">Записки марсианина</string>
     <string name="dreawer_header_text">Примерный текст для заголовка бокового меню</string>
     <string name="back_text">Назад</string>
+    <string name="main_screen">Главный экран</string>
 </resources>

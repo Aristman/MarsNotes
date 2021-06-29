@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +21,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainerView;
 
 import java.util.Calendar;
 
@@ -164,26 +162,29 @@ public class NoteDetailsFragment extends Fragment implements Observer {
         View view = this.getView();
         noteTitle.setText(note.getTitle());
         noteDescription.setText(note.getDescription());
-        category.setAdapter(getCategoryListAdapter());
         category.setSelection(note.getCategoryId());
         date.setText(note.getDate());
         time.setText(note.getTime());
         noteDescriptionCard.setCardBackgroundColor(note.getColor().getColorId());
+        setCategoryListAdapter();
         if (view != null) {
             view.setBackgroundColor(note.getColor().getColorId());
 
         }
     }
 
-    private ArrayAdapter<String> getCategoryListAdapter() {
-        ArrayAdapter<String> categoryAdapter =
-                new ArrayAdapter<>(
-                        requireContext(),
-                        R.layout.item_category,
-                        repository.getCategoryNames()
-                );
-        categoryAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        return categoryAdapter;
+    private void setCategoryListAdapter() {
+        repository.getCategoryNames(result -> {
+            ArrayAdapter<String> categoryAdapter =
+                    new ArrayAdapter<>(
+                            requireContext(),
+                            R.layout.item_category,
+                            result
+                    );
+            categoryAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+            category.setAdapter(categoryAdapter);
+        });
+
     }
 
     @Override

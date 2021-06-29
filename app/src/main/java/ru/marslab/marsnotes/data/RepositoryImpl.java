@@ -1,10 +1,17 @@
 package ru.marslab.marsnotes.data;
 
-import android.telecom.Call;
+import android.os.Build;
+import android.util.Log;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ru.marslab.marsnotes.domain.Callback;
 import ru.marslab.marsnotes.domain.Repository;
@@ -13,8 +20,12 @@ import ru.marslab.marsnotes.domain.model.NoteCategory;
 import ru.marslab.marsnotes.domain.model.NoteColor;
 
 public class RepositoryImpl implements Repository {
-    private List<NoteCategory> categories;
-    private List<Note> notes;
+    public static final int NO_ITEM_INDEX = -1;
+    public static final String ERROR_TAG = "NOTES_ERROR_TAG";
+
+
+    private final List<NoteCategory> categories;
+    private final List<Note> notes;
 
     public RepositoryImpl() {
         notes = new ArrayList<>();
@@ -56,38 +67,76 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    public List<NoteCategory> getCategories() {
-        return categories;
+    public void getCategories(Callback<List<NoteCategory>> callback) {
+        callback.onSuccess(categories);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void getCategoryNames(Callback<List<String>> callback) {
+        callback.onSuccess(categories.stream().map(NoteCategory::getName)
+                .collect(Collectors.toList()));
+    }
 
     @Override
-    public List<String> getCategoryNames() {
-        List<String> result = new ArrayList<>();
-        for (NoteCategory category : categories) {
-            result.add(category.getName());
+    public void getCategory(int categoryId, Callback<NoteCategory> callback) {
+        callback.onSuccess(categories.get(categoryId));
+    }
+
+    @Override
+    public void deleteNote(int deleteIndex, Callback<Note> callback) {
+        callback.onSuccess(notes.remove(deleteIndex));
+    }
+
+    @Override
+    public void deleteNote(Note note, Callback<Boolean> callback) {
+        callback.onSuccess(notes.remove(note));
+    }
+
+    @Override
+    public void addNote(Note note, Callback<Integer> callback) {
+        if (notes.add(note)) {
+            callback.onSuccess(notes.size() - 1);
+        } else {
+            callback.onSuccess(NO_ITEM_INDEX);
         }
-        return result;
     }
 
     @Override
-    public NoteCategory getCategory(int categoryId) {
-        for (NoteCategory category : categories) {
-            if (category.getId() == categoryId) {
-                return category;
-            }
+    public void modifyNote(String newText, Note note, Callback<Integer> callback) {
+        int index = NO_ITEM_INDEX;
+        if (notes.contains(note)) {
+            index = notes.indexOf(note);
+            notes.remove(note);
+            note.setDescription(newText);
+            notes.add(index, note);
         }
-        return NoteCategory.getInstance();
+        callback.onSuccess(index);
     }
 
     @Override
-    public void deleteNote(int deleteIndex) {
-        notes.remove(deleteIndex);
+    public void modifyNote(Date newDate, Note note, Callback<Integer> callback) {
+        int index = NO_ITEM_INDEX;
+        if (notes.contains(note)) {
+            index = notes.indexOf(note);
+            notes.remove(note);
+            note.setDate(newDate);
+            notes.add(index, note);
+        }
+        callback.onSuccess(index);
     }
 
     @Override
-    public void deleteNote(Note note) {
-        notes.remove(note);
+    public void modifyNote(NoteCategory newCategory, Note note, Callback<Integer> callback) {
+        int index = NO_ITEM_INDEX;
+        if (notes.contains(note)) {
+            index = notes.indexOf(note);
+            notes.remove(note);
+            note.setCategory(newCategory.getId());
+            notes.add(index, note);
+        }
+        callback.onSuccess(index);
     }
+
 
 }

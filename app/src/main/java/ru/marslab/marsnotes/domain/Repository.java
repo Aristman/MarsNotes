@@ -1,5 +1,6 @@
 package ru.marslab.marsnotes.domain;
 
+import java.util.Date;
 import java.util.List;
 
 import ru.marslab.marsnotes.domain.model.Note;
@@ -9,13 +10,21 @@ public interface Repository {
 
     void getNotes(Callback<List<Note>> callback);
 
-    List<NoteCategory> getCategories();
+    void getCategories(Callback<List<NoteCategory>> callback);
 
-    List<String> getCategoryNames();
+    void getCategoryNames(Callback<List<String>> callback);
 
-    NoteCategory getCategory(int categoryId);
+    void getCategory(int categoryId, Callback<NoteCategory> callback);
 
-    void deleteNote(int deleteIndex);
+    void deleteNote(int deleteIndex, Callback<Note> deletedNote);
 
-    void deleteNote(Note note);
+    void deleteNote(Note note, Callback<Boolean> deletedIndex);
+
+    void addNote(Note note, Callback<Integer> newIndex);
+
+    void modifyNote(String noteText, Note note, Callback<Integer> result);
+
+    void modifyNote(Date noteDate,Note note, Callback<Integer> result);
+
+    void modifyNote(NoteCategory noteCategory,Note note, Callback<Integer> result);
 }

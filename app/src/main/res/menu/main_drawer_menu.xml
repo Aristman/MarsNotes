@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/about_program"
-        android:title="@string/menu_item_about" />
-    <item
-        android:id="@+id/settings"
-        android:title="@string/settings_string"/>
+    <group android:id="@+id/main_group">
+        <item
+            android:id="@+id/main_screen"
+            android:title="@string/main_screen">
+        </item>
+    </group>
+    <group android:id="@+id/setting_group">
+        <item
+            android:id="@+id/about_program"
+            android:title="@string/menu_item_about" />
+        <item
+            android:id="@+id/settings"
+            android:title="@string/settings_string" />
+    </group>
+
 
 </menu>

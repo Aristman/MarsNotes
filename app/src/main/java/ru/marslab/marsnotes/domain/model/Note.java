@@ -3,6 +3,8 @@ package ru.marslab.marsnotes.domain.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -144,5 +146,11 @@ public class Note implements Parcelable {
         dest.writeInt(categoryId);
         dest.writeLong(date.getTime());
         dest.writeString(color.name());
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }

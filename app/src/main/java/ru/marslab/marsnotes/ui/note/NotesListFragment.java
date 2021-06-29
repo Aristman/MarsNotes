@@ -76,23 +76,6 @@ public class NotesListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView notesList = view.findViewById(R.id.notes_list_rv);
         notesList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        //            @Override
-//            public void onLongClickListener(@NonNull Note note, View v) {
-//                PopupMenu popupMenu = new PopupMenu(requireContext(), v);
-//                popupMenu.inflate(R.menu.notes_list_item_popup_menu);
-//                popupMenu.setOnMenuItemClickListener(item -> {
-//                    int id = item.getItemId();
-//                    if (id == R.id.edit_note) {
-//                        // TODO ("Редактирование заметки")
-//                        Toast.makeText(requireContext(), "Edit Note", Toast.LENGTH_SHORT).show();
-//                    } else if (id == R.id.delete_note) {
-//                        // TODO ("Удаление заметки")
-//                        Toast.makeText(requireContext(), "Delete Note", Toast.LENGTH_SHORT).show();
-//                    }
-//                    return false;
-//                });
-//                popupMenu.show();
-//            }
         initNotesListAdapter();
         notesList.setAdapter(notesListAdapter);
         repository.getNotes(result -> notesListAdapter.setListNotes(result));
@@ -132,9 +115,10 @@ public class NotesListFragment extends Fragment {
             Toast.makeText(requireContext(), noteOnLongClicked.getTitle() + " Edit", Toast.LENGTH_SHORT).show();
         }
         if (item.getItemId() == R.id.delete_note) {
-            repository.deleteNote(noteOnLongClicked);
-            notesListAdapter.deleteNote(noteOnLongClicked);
-            notesListAdapter.notifyItemRemoved(noteIndexOnLongClicked);
+            repository.deleteNote(noteOnLongClicked, result -> {
+                notesListAdapter.deleteNote(noteOnLongClicked);
+                notesListAdapter.notifyItemRemoved(noteIndexOnLongClicked);
+            });
         }
         return super.onContextItemSelected(item);
     }

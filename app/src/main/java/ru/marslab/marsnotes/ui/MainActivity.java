@@ -24,6 +24,7 @@ import ru.marslab.marsnotes.domain.PublisherHolder;
 
 public class MainActivity extends AppCompatActivity implements PublisherHolder, FragmentRouterHolder {
 
+
     private final Publisher publisher = new Publisher();
     private Toolbar toolbar;
     private FragmentRouter fragmentRouter;
@@ -42,14 +43,11 @@ public class MainActivity extends AppCompatActivity implements PublisherHolder, 
     }
 
     private void initFragmentContainers() {
-        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                if (getSupportFragmentManager().getBackStackEntryCount() == 0 &&
-                        getResources().getBoolean(R.bool.isLandscape)) {
-                    FragmentContainerView noteFragmentContainer = findViewById(R.id.note_fragment_container);
-                    noteFragmentContainer.setVisibility(View.VISIBLE);
-                }
+        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0 &&
+                    getResources().getBoolean(R.bool.isLandscape)) {
+                FragmentContainerView noteFragmentContainer = findViewById(R.id.note_fragment_container);
+                noteFragmentContainer.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -104,6 +102,8 @@ public class MainActivity extends AppCompatActivity implements PublisherHolder, 
                     noteFragmentContainer.setVisibility(View.GONE);
                 }
                 return true;
+            } else if(item.getItemId() == R.id.main_screen) {
+                fragmentRouter.showNotesList();
             }
             return false;
         });
