@@ -3,7 +3,6 @@ package ru.marslab.marsnotes.ui;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,15 +21,20 @@ import ru.marslab.marsnotes.ui.about.AboutFragment;
 import ru.marslab.marsnotes.ui.settings.SettingsFragment;
 
 
-public class MainActivity extends AppCompatActivity implements PublisherHolder {
+public class MainActivity extends AppCompatActivity implements PublisherHolder, FragmentRouterHolder {
 
     private final Publisher publisher = new Publisher();
     private Toolbar toolbar;
+    private FragmentRouter fragmentRouter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav_drawer);
+        fragmentRouter = new FragmentRouter(getSupportFragmentManager());
+        if (savedInstanceState == null) {
+            fragmentRouter.showNotesList();
+        }
         initToolbar();
         initDrawer();
     }
@@ -73,16 +77,10 @@ public class MainActivity extends AppCompatActivity implements PublisherHolder {
         navigationView.setNavigationItemSelectedListener(item -> {
             drawer.closeDrawer(GravityCompat.START);
             if (item.getItemId() == R.id.about_program) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.main_fragment_container, new AboutFragment())
-                        .addToBackStack(null)
-                        .commit();
+                fragmentRouter.showAbout();
                 return true;
             } else if (item.getItemId() == R.id.settings) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.main_fragment_container, new SettingsFragment())
-                        .addToBackStack(null)
-                        .commit();
+                fragmentRouter.showSettings();
                 return true;
             }
             return false;
@@ -95,4 +93,8 @@ public class MainActivity extends AppCompatActivity implements PublisherHolder {
         return publisher;
     }
 
+    @Override
+    public FragmentRouter getRouter() {
+        return fragmentRouter;
+    }
 }

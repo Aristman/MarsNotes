@@ -37,6 +37,7 @@ import ru.marslab.marsnotes.domain.PublisherHolder;
 public class NoteDetailsFragment extends Fragment implements Observer {
 
     private static final String NOTE_KEY = "note_key";
+    public static final String TAG = "NoteDetailsFragment";
 
     private Repository repository;
     private Publisher publisher;
@@ -102,32 +103,8 @@ public class NoteDetailsFragment extends Fragment implements Observer {
         date = view.findViewById(R.id.note_date);
         time = view.findViewById(R.id.note_time);
         noteDescriptionCard = view.findViewById(R.id.note_description_card);
-        view.findViewById(R.id.note_date_picker_btn).setOnClickListener(v -> {
-            DatePickerDialog dataPicker = new DatePickerDialog(
-                    requireContext(),
-                    (view1, year, month, dayOfMonth) -> {
-                        note.setCalendarDate(year, month, dayOfMonth);
-                        updateNoteInfo();
-                    },
-                    note.getCalendar().get(Calendar.YEAR),
-                    note.getCalendar().get(Calendar.MONTH),
-                    note.getCalendar().get(Calendar.DAY_OF_MONTH)
-            );
-            dataPicker.show();
-        });
-        view.findViewById(R.id.note_time_picker_btn).setOnClickListener(v -> {
-            TimePickerDialog dataPicker = new TimePickerDialog(
-                    requireContext(),
-                    (view12, hourOfDay, minute) -> {
-                        note.setCalendarTime(hourOfDay, minute);
-                        updateNoteInfo();
-                    },
-                    note.getCalendar().get(Calendar.HOUR_OF_DAY),
-                    note.getCalendar().get(Calendar.MINUTE),
-                    true
-            );
-            dataPicker.show();
-        });
+        view.findViewById(R.id.note_date_picker_btn).setOnClickListener(v -> showDataPicker());
+        view.findViewById(R.id.note_time_picker_btn).setOnClickListener(v -> showTimePicker());
 
         if (getArguments() != null) {
             note = repository.getNote(
@@ -136,6 +113,34 @@ public class NoteDetailsFragment extends Fragment implements Observer {
             updateNoteInfo();
         }
 
+    }
+
+    private void showTimePicker() {
+        TimePickerDialog dataPicker = new TimePickerDialog(
+                requireContext(),
+                (view12, hourOfDay, minute) -> {
+                    note.setCalendarTime(hourOfDay, minute);
+                    updateNoteInfo();
+                },
+                note.getCalendar().get(Calendar.HOUR_OF_DAY),
+                note.getCalendar().get(Calendar.MINUTE),
+                true
+        );
+        dataPicker.show();
+    }
+
+    private void showDataPicker() {
+        DatePickerDialog dataPicker = new DatePickerDialog(
+                requireContext(),
+                (view1, year, month, dayOfMonth) -> {
+                    note.setCalendarDate(year, month, dayOfMonth);
+                    updateNoteInfo();
+                },
+                note.getCalendar().get(Calendar.YEAR),
+                note.getCalendar().get(Calendar.MONTH),
+                note.getCalendar().get(Calendar.DAY_OF_MONTH)
+        );
+        dataPicker.show();
     }
 
     @Override
@@ -183,7 +188,7 @@ public class NoteDetailsFragment extends Fragment implements Observer {
     }
 
     @Override
-    public void updateNoteId(int noteId) {
+    public void updateNoteById(int noteId) {
         note = repository.getNote(noteId);
         updateNoteInfo();
     }

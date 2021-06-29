@@ -1,47 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/note_card"
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_notes_list_height"
-    android:layout_marginVertical="@dimen/space_8dp"
-    android:elevation="@dimen/elevation_item">
+    android:layout_marginHorizontal="@dimen/space_16dp"
+    android:layout_marginTop="@dimen/space_16dp"
+    app:cardCornerRadius="@dimen/space_16dp"
+    app:cardElevation="@dimen/elevation_item">
 
-    <ImageView
-        android:id="@+id/item_notes_list_image"
-        android:layout_width="@dimen/image_preview"
-        android:layout_height="@dimen/image_preview"
-        android:layout_marginStart="@dimen/space_16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/notes"
-        android:contentDescription="@string/note_image_description" />
-
-    <TextView
-        android:id="@+id/item_notes_list_title"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Название 1" />
+        android:layout_height="match_parent"
+        android:background="?selectableItemBackground">
 
-    <TextView
-        android:id="@+id/item_notes_list_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:maxLines="3"
-        android:layout_marginStart="@dimen/space_12dp"
-        android:layout_marginTop="@dimen/space_16dp"
-        android:layout_marginBottom="@dimen/space_12dp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-        tools:text="Записка 1 Записка 1 Записка 1 Записка 1 Записка 1 Записка 1 Записка 1 Записка 1 "
-        app:layout_constraintStart_toEndOf="@id/item_notes_list_image"
-        app:layout_constraintTop_toBottomOf="@id/item_notes_list_title"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <ImageView
+            android:id="@+id/item_notes_list_image"
+            android:layout_width="@dimen/image_preview"
+            android:layout_height="@dimen/image_preview"
+            android:layout_marginStart="@dimen/space_16dp"
+            android:contentDescription="@string/note_image_description"
+            android:src="@drawable/notes"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/item_notes_list_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Название 1" />
+
+        <TextView
+            android:id="@+id/item_notes_list_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_12dp"
+            android:layout_marginTop="@dimen/space_16dp"
+            android:layout_marginBottom="@dimen/space_12dp"
+            android:maxLines="3"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/item_notes_list_image"
+            app:layout_constraintTop_toBottomOf="@id/item_notes_list_title"
+            tools:text="Записка 1 Записка 1 Записка 1 Записка 1 Записка 1 Записка 1 Записка 1 Записка 1 " />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
