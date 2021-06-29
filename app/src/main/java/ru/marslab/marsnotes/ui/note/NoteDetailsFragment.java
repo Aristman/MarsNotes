@@ -21,11 +21,13 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 
 import java.util.Calendar;
 
 import ru.marslab.marsnotes.App;
 import ru.marslab.marsnotes.R;
+import ru.marslab.marsnotes.domain.Callback;
 import ru.marslab.marsnotes.domain.Observer;
 import ru.marslab.marsnotes.domain.Repository;
 import ru.marslab.marsnotes.domain.model.Note;
@@ -105,11 +107,27 @@ public class NoteDetailsFragment extends Fragment implements Observer {
         view.findViewById(R.id.note_date).setOnClickListener(v -> showDataPicker());
         view.findViewById(R.id.note_time).setOnClickListener(v -> showTimePicker());
 
+        noteDescription.setOnClickListener(v -> showEditDescriptionDialog());
+
+        getChildFragmentManager().setFragmentResultListener(
+                NoteEditFragment.NOTE_DESCRIPTION_EDIT_RESULT,
+                getViewLifecycleOwner(),
+                (requestKey, result) -> {
+                    String newNoteText = result.getString(NoteEditFragment.NOTE_TEXT_KEY);
+                    noteDescription.setText(newNoteText);
+                    repository.modifyNote(newNoteText, note, result1 -> {
+                    });
+                });
         if (getArguments() != null) {
             note = getArguments().getParcelable(NOTE_KEY);
             updateNoteInfo();
         }
 
+    }
+
+    private void showEditDescriptionDialog() {
+        NoteEditFragment.newInstance(noteDescription.getText().toString())
+                .show(getChildFragmentManager(), NoteEditFragment.TAG);
     }
 
     private void showTimePicker() {
