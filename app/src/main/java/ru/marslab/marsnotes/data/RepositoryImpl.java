@@ -1,9 +1,12 @@
 package ru.marslab.marsnotes.data;
 
+import android.telecom.Call;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import ru.marslab.marsnotes.domain.Callback;
 import ru.marslab.marsnotes.domain.Repository;
 import ru.marslab.marsnotes.domain.model.Note;
 import ru.marslab.marsnotes.domain.model.NoteCategory;
@@ -36,7 +39,7 @@ public class RepositoryImpl implements Repository {
                         "asdfasdf asdfasdf asdfasdf asdfa sdf asdfasdfasdf asdfasdfas df asdfasd fasd f asdf" +
                         "asdfasdf asdfasdf assdfasdf asdfasdf asdf   dsa f a sdf as dfasdfas записки номер 2",
                 Calendar.getInstance().getTime(),
-                 2,
+                2,
                 NoteColor.YELLOW));
         notes.add(new Note(
                 id,
@@ -48,8 +51,8 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    public List<Note> getNotes() {
-        return notes;
+    public void getNotes(Callback<List<Note>> callback) {
+        callback.onSuccess(notes);
     }
 
     @Override
@@ -57,15 +60,6 @@ public class RepositoryImpl implements Repository {
         return categories;
     }
 
-    @Override
-    public Note getNote(int noteId) {
-        for (Note note : notes) {
-            if (note.getId() == noteId) {
-                return note;
-            }
-        }
-        return null;
-    }
 
     @Override
     public List<String> getCategoryNames() {
@@ -84,6 +78,16 @@ public class RepositoryImpl implements Repository {
             }
         }
         return NoteCategory.getInstance();
+    }
+
+    @Override
+    public void deleteNote(int deleteIndex) {
+        notes.remove(deleteIndex);
+    }
+
+    @Override
+    public void deleteNote(Note note) {
+        notes.remove(note);
     }
 
 }

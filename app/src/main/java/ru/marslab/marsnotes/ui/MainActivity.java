@@ -3,6 +3,7 @@ package ru.marslab.marsnotes.ui;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -11,14 +12,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentContainerView;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
 
 import ru.marslab.marsnotes.R;
 import ru.marslab.marsnotes.domain.Publisher;
 import ru.marslab.marsnotes.domain.PublisherHolder;
-import ru.marslab.marsnotes.ui.about.AboutFragment;
-import ru.marslab.marsnotes.ui.settings.SettingsFragment;
 
 
 public class MainActivity extends AppCompatActivity implements PublisherHolder, FragmentRouterHolder {
@@ -35,8 +36,22 @@ public class MainActivity extends AppCompatActivity implements PublisherHolder, 
         if (savedInstanceState == null) {
             fragmentRouter.showNotesList();
         }
+        initFragmentContainers();
         initToolbar();
         initDrawer();
+    }
+
+    private void initFragmentContainers() {
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                if (getSupportFragmentManager().getBackStackEntryCount() == 0 &&
+                        getResources().getBoolean(R.bool.isLandscape)) {
+                    FragmentContainerView noteFragmentContainer = findViewById(R.id.note_fragment_container);
+                    noteFragmentContainer.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     private void initToolbar() {
@@ -76,11 +91,18 @@ public class MainActivity extends AppCompatActivity implements PublisherHolder, 
         NavigationView navigationView = findViewById(R.id.main_navigation_view);
         navigationView.setNavigationItemSelectedListener(item -> {
             drawer.closeDrawer(GravityCompat.START);
+            FragmentContainerView noteFragmentContainer = findViewById(R.id.note_fragment_container);
             if (item.getItemId() == R.id.about_program) {
                 fragmentRouter.showAbout();
+                if (getResources().getBoolean(R.bool.isLandscape)) {
+                    noteFragmentContainer.setVisibility(View.GONE);
+                }
                 return true;
             } else if (item.getItemId() == R.id.settings) {
                 fragmentRouter.showSettings();
+                if (getResources().getBoolean(R.bool.isLandscape)) {
+                    noteFragmentContainer.setVisibility(View.GONE);
+                }
                 return true;
             }
             return false;

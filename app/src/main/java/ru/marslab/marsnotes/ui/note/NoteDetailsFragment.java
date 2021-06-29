@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 
 import java.util.Calendar;
 
@@ -46,14 +47,14 @@ public class NoteDetailsFragment extends Fragment implements Observer {
     private TextView noteTitle;
     private TextView noteDescription;
     private Spinner category;
-    private EditText date;
-    private EditText time;
+    private TextView date;
+    private TextView time;
     private CardView noteDescriptionCard;
 
-    public static NoteDetailsFragment newInstance(int noteId) {
+    public static NoteDetailsFragment newInstance(Note note) {
         NoteDetailsFragment fragment = new NoteDetailsFragment();
         Bundle argsBundle = new Bundle();
-        argsBundle.putInt(NOTE_KEY, noteId);
+        argsBundle.putParcelable(NOTE_KEY, note);
         fragment.setArguments(argsBundle);
         return fragment;
     }
@@ -67,7 +68,7 @@ public class NoteDetailsFragment extends Fragment implements Observer {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.notes_list_item_popup_menu, menu);
+        inflater.inflate(R.menu.notes_list_item_context_menu, menu);
     }
 
     @Override
@@ -103,13 +104,11 @@ public class NoteDetailsFragment extends Fragment implements Observer {
         date = view.findViewById(R.id.note_date);
         time = view.findViewById(R.id.note_time);
         noteDescriptionCard = view.findViewById(R.id.note_description_card);
-        view.findViewById(R.id.note_date_picker_btn).setOnClickListener(v -> showDataPicker());
-        view.findViewById(R.id.note_time_picker_btn).setOnClickListener(v -> showTimePicker());
+        view.findViewById(R.id.note_date).setOnClickListener(v -> showDataPicker());
+        view.findViewById(R.id.note_time).setOnClickListener(v -> showTimePicker());
 
         if (getArguments() != null) {
-            note = repository.getNote(
-                    getArguments().getInt(NOTE_KEY)
-            );
+            note = getArguments().getParcelable(NOTE_KEY);
             updateNoteInfo();
         }
 
@@ -188,8 +187,8 @@ public class NoteDetailsFragment extends Fragment implements Observer {
     }
 
     @Override
-    public void updateNoteById(int noteId) {
-        note = repository.getNote(noteId);
+    public void updateNote(Note note) {
+        this.note = note;
         updateNoteInfo();
     }
 }

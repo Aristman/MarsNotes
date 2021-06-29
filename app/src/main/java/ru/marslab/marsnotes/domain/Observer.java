@@ -1,6 +1,8 @@
 package ru.marslab.marsnotes.domain;
 
+import ru.marslab.marsnotes.domain.model.Note;
+
 public interface Observer {
 
-    void updateNoteById(int noteId);
+    void updateNote(Note note);
 }

@@ -28,65 +28,36 @@
 
     <Spinner
         android:id="@+id/note_category"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_16dp"
-        android:layout_marginEnd="@dimen/space_16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/note_image"
         app:layout_constraintTop_toTopOf="@id/note_image" />
 
 
-    <ImageButton
-        android:id="@+id/note_date_picker_btn"
+    <TextView
+        android:id="@+id/note_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_16dp"
-        android:contentDescription="@string/date_image_description"
-        android:src="@drawable/ic_baseline_arrow_drop_down_24"
-        app:layout_constraintBottom_toBottomOf="@id/note_image"
-        app:layout_constraintEnd_toStartOf="@id/note_date"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@id/note_image"
-        app:layout_constraintTop_toBottomOf="@id/note_category" />
-
-    <EditText
-        android:id="@+id/note_date"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:importantForAutofill="no"
-        android:inputType="date"
         android:hint="@string/date_hint"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-        app:layout_constraintBottom_toBottomOf="@id/note_image"
-        app:layout_constraintStart_toEndOf="@id/note_date_picker_btn"
-        app:layout_constraintTop_toBottomOf="@id/note_category" />
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        app:layout_constraintBottom_toTopOf="@id/note_time"
+        app:layout_constraintTop_toBottomOf="@id/note_category"
+        app:layout_constraintStart_toEndOf="@id/note_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"/>
 
-    <EditText
+    <TextView
         android:id="@+id/note_time"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:importantForAutofill="no"
-        android:inputType="time"
-        android:textAlignment="textEnd"
         android:hint="@string/time_hint"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+        android:layout_marginTop="@dimen/space_8dp"
         app:layout_constraintBottom_toBottomOf="@id/note_image"
-        app:layout_constraintEnd_toStartOf="@id/note_time_picker_btn"
-        app:layout_constraintStart_toEndOf="@id/note_date"
-        app:layout_constraintTop_toBottomOf="@id/note_category" />
-
-    <ImageButton
-        android:id="@+id/note_time_picker_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/space_16dp"
-        android:contentDescription="@string/time_image_description"
-        android:src="@drawable/ic_baseline_arrow_drop_down_24"
-        app:layout_constraintBottom_toBottomOf="@id/note_image"
+        app:layout_constraintStart_toEndOf="@id/note_image"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/note_time"
-        app:layout_constraintTop_toBottomOf="@id/note_category" />
+        app:layout_constraintTop_toBottomOf="@id/note_date" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/note_description_card"

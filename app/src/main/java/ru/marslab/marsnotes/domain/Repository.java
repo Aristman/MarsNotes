@@ -7,13 +7,15 @@ import ru.marslab.marsnotes.domain.model.NoteCategory;
 
 public interface Repository {
 
-    List<Note> getNotes();
+    void getNotes(Callback<List<Note>> callback);
 
     List<NoteCategory> getCategories();
-
-    Note getNote(int noteId);
 
     List<String> getCategoryNames();
 
     NoteCategory getCategory(int categoryId);
+
+    void deleteNote(int deleteIndex);
+
+    void deleteNote(Note note);
 }
