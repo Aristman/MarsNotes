@@ -9,8 +9,17 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 public class Note implements Parcelable {
+
+    static Note newInstance() {
+        return new Note(
+                UUID.randomUUID().clockSequence(),
+                "",
+                ""
+        );
+    }
 
     private final int id;
     private String title;

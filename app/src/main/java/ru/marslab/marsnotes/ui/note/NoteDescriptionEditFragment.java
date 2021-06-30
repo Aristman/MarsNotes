@@ -13,7 +13,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import ru.marslab.marsnotes.R;
 
-public class NoteEditFragment extends DialogFragment {
+public class NoteDescriptionEditFragment extends DialogFragment {
     public static final String TAG = "NoteEditFragment";
     public static final String NOTE_TEXT_KEY = "NOTE_ID_KEY";
     public static final String NOTE_DESCRIPTION_EDIT_RESULT = "NoteEditFragment";
@@ -21,8 +21,8 @@ public class NoteEditFragment extends DialogFragment {
     private String text;
     private TextInputEditText textView;
 
-    public static NoteEditFragment newInstance(String text) {
-        NoteEditFragment noteEditFragment = new NoteEditFragment();
+    public static NoteDescriptionEditFragment newInstance(String text) {
+        NoteDescriptionEditFragment noteEditFragment = new NoteDescriptionEditFragment();
         Bundle bundle = new Bundle();
         bundle.putString(NOTE_TEXT_KEY, text);
         noteEditFragment.setArguments(bundle);

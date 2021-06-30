@@ -1,10 +1,14 @@
 package ru.marslab.marsnotes.domain;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.Date;
 import java.util.List;
 
 import ru.marslab.marsnotes.domain.model.Note;
 import ru.marslab.marsnotes.domain.model.NoteCategory;
+import ru.marslab.marsnotes.domain.model.NoteColor;
 
 public interface Repository {
 
@@ -16,15 +20,20 @@ public interface Repository {
 
     void getCategory(int categoryId, Callback<NoteCategory> callback);
 
-    void deleteNote(int deleteIndex, Callback<Note> deletedNote);
+    void getCategoryByName(String categoryName, Callback<NoteCategory> callback);
 
-    void deleteNote(Note note, Callback<Boolean> deletedIndex);
+    void deleteNote(int deleteIndex, Callback<Note> callback);
 
-    void addNote(Note note, Callback<Integer> newIndex);
+    void deleteNote(Note note, Callback<Boolean> callback);
 
-    void modifyNote(String noteText, Note note, Callback<Integer> result);
+    void addNote(Note note, Callback<Integer> callback);
 
-    void modifyNote(Date noteDate,Note note, Callback<Integer> result);
-
-    void modifyNote(NoteCategory noteCategory,Note note, Callback<Integer> result);
+    void modifyNote(
+            @NonNull Note note,
+            @Nullable String title,
+            @Nullable String description,
+            @Nullable Date date,
+            @Nullable NoteCategory category,
+            @Nullable NoteColor color,
+            Callback<Note> callback);
 }

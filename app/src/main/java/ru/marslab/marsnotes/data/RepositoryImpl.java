@@ -1,13 +1,12 @@
 package ru.marslab.marsnotes.data;
 
 import android.os.Build;
-import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +29,7 @@ public class RepositoryImpl implements Repository {
     public RepositoryImpl() {
         notes = new ArrayList<>();
         categories = new ArrayList<>();
-        int id = 1;
+        int id = 10;
         categories.add(new NoteCategory(id++, "Категория 1"));
         categories.add(new NoteCategory(id++, "Категория 2"));
         categories.add(new NoteCategory(id++, "Категория 3"));
@@ -41,7 +40,7 @@ public class RepositoryImpl implements Repository {
                 "Запись 1",
                 "описание записки номер 1",
                 Calendar.getInstance().getTime(),
-                1,
+                11,
                 NoteColor.RED));
         notes.add(new Note(
                 id++,
@@ -50,14 +49,14 @@ public class RepositoryImpl implements Repository {
                         "asdfasdf asdfasdf asdfasdf asdfa sdf asdfasdfasdf asdfasdfas df asdfasd fasd f asdf" +
                         "asdfasdf asdfasdf assdfasdf asdfasdf asdf   dsa f a sdf as dfasdfas записки номер 2",
                 Calendar.getInstance().getTime(),
-                2,
+                12,
                 NoteColor.YELLOW));
         notes.add(new Note(
                 id,
                 "Запись 3",
                 "описание записки номер 3",
                 Calendar.getInstance().getTime(),
-                3,
+                10,
                 NoteColor.VIOLET));
     }
 
@@ -74,13 +73,26 @@ public class RepositoryImpl implements Repository {
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void getCategoryNames(Callback<List<String>> callback) {
-        callback.onSuccess(categories.stream().map(NoteCategory::getName)
+        callback.onSuccess(categories.stream().map(NoteCategory::getCategoryName)
                 .collect(Collectors.toList()));
     }
 
     @Override
     public void getCategory(int categoryId, Callback<NoteCategory> callback) {
-        callback.onSuccess(categories.get(categoryId));
+        for (NoteCategory category : categories) {
+            if (category.getCategoryId() == categoryId) {
+                callback.onSuccess(category);
+            }
+        }
+    }
+
+    @Override
+    public void getCategoryByName(String categoryName, Callback<NoteCategory> callback) {
+        for (NoteCategory category : categories) {
+            if (category.getCategoryName().equals(categoryName)) {
+                callback.onSuccess(category);
+            }
+        }
     }
 
     @Override
@@ -103,40 +115,29 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    public void modifyNote(String newText, Note note, Callback<Integer> callback) {
-        int index = NO_ITEM_INDEX;
-        if (notes.contains(note)) {
-            index = notes.indexOf(note);
-            notes.remove(note);
-            note.setDescription(newText);
-            notes.add(index, note);
+    public void modifyNote(
+            @NonNull Note note,
+            @Nullable String title,
+            @Nullable String description,
+            @Nullable Date date,
+            @Nullable NoteCategory category,
+            @Nullable NoteColor color,
+            Callback<Note> callback) {
+        if (title != null) {
+            note.setTitle(title);
         }
-        callback.onSuccess(index);
-    }
-
-    @Override
-    public void modifyNote(Date newDate, Note note, Callback<Integer> callback) {
-        int index = NO_ITEM_INDEX;
-        if (notes.contains(note)) {
-            index = notes.indexOf(note);
-            notes.remove(note);
-            note.setDate(newDate);
-            notes.add(index, note);
+        if (description != null) {
+            note.setDescription(description);
         }
-        callback.onSuccess(index);
-    }
-
-    @Override
-    public void modifyNote(NoteCategory newCategory, Note note, Callback<Integer> callback) {
-        int index = NO_ITEM_INDEX;
-        if (notes.contains(note)) {
-            index = notes.indexOf(note);
-            notes.remove(note);
-            note.setCategory(newCategory.getId());
-            notes.add(index, note);
+        if (date != null) {
+            note.setDate(date);
         }
-        callback.onSuccess(index);
+        if (category != null) {
+            note.setCategory(category.getCategoryId());
+        }
+        if (color != null) {
+            note.setColor(color);
+        }
+        callback.onSuccess(note);
     }
-
-
 }
