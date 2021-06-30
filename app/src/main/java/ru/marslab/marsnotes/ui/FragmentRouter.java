@@ -6,6 +6,7 @@ import ru.marslab.marsnotes.R;
 import ru.marslab.marsnotes.domain.model.Note;
 import ru.marslab.marsnotes.ui.about.AboutFragment;
 import ru.marslab.marsnotes.ui.note.NoteDetailsFragment;
+import ru.marslab.marsnotes.ui.note.NoteEditFragment;
 import ru.marslab.marsnotes.ui.note.NotesListFragment;
 import ru.marslab.marsnotes.ui.settings.SettingsFragment;
 
@@ -35,6 +36,17 @@ public class FragmentRouter {
                         NoteDetailsFragment.TAG
                 )
                 .addToBackStack(NoteDetailsFragment.TAG)
+                .commit();
+    }
+
+    public void showEditNote(Note note) {
+        fragmentManager.beginTransaction()
+                .replace(
+                        R.id.main_fragment_container,
+                        NoteEditFragment.newInstance(note),
+                        NoteEditFragment.TAG
+                )
+                .addToBackStack(NoteEditFragment.TAG)
                 .commit();
     }
 

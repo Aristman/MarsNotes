@@ -8,7 +8,7 @@ public enum NoteColor {
     VIOLET(0xFFFF00FF, "Фиолетовый"),
     SKY(0xFF00FFFF, "Голубой"),
     YELLOW(0xFFFFFF00, "Желтый"),
-    GRAY(0xFF555555, "Зеленый");
+    GRAY(0xFF555555, "Серый");
 
     private final int colorId;
     private final String colorName;

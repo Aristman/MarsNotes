@@ -111,8 +111,9 @@ public class NotesListFragment extends Fragment {
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.edit_note) {
-            // TODO ("Обработка изменения записи")
-            Toast.makeText(requireContext(), noteOnLongClicked.getTitle() + " Edit", Toast.LENGTH_SHORT).show();
+            if (requireActivity() instanceof FragmentRouterHolder) {
+                ((FragmentRouterHolder) requireActivity()).getRouter().showEditNote(noteOnLongClicked);
+            }
         }
         if (item.getItemId() == R.id.delete_note) {
             repository.deleteNote(noteOnLongClicked, result -> {

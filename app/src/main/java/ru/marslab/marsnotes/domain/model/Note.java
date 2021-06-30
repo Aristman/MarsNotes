@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class Note implements Parcelable {
 
-    static Note newInstance() {
+    public static Note newInstance() {
         return new Note(
                 UUID.randomUUID().clockSequence(),
                 "",
