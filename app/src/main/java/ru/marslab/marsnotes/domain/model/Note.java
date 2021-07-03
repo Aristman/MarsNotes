@@ -15,7 +15,7 @@ public class Note implements Parcelable {
 
     public static Note newInstance() {
         return new Note(
-                UUID.randomUUID().clockSequence(),
+                UUID.randomUUID().variant(),
                 "",
                 ""
         );

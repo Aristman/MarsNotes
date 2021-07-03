@@ -30,6 +30,7 @@ public class RepositoryImpl implements Repository {
         notes = new ArrayList<>();
         categories = new ArrayList<>();
         int id = 10;
+        categories.add(NoteCategory.getInstance());
         categories.add(new NoteCategory(id++, "Категория 1"));
         categories.add(new NoteCategory(id++, "Категория 2"));
         categories.add(new NoteCategory(id++, "Категория 3"));

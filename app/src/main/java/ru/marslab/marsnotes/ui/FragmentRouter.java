@@ -50,6 +50,17 @@ public class FragmentRouter {
                 .commit();
     }
 
+    public void showNewNote() {
+        fragmentManager.beginTransaction()
+                .replace(
+                        R.id.main_fragment_container,
+                        new NoteEditFragment(),
+                        NoteEditFragment.TAG
+                )
+                .addToBackStack(NoteEditFragment.TAG)
+                .commit();
+    }
+
     public void showAbout() {
         fragmentManager.beginTransaction()
                 .replace(

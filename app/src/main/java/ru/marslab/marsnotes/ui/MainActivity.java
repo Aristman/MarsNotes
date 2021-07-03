@@ -67,8 +67,7 @@ public class MainActivity extends AppCompatActivity implements PublisherHolder, 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.new_note) {
-            // TODO ("добавление новой заметки")
-            Toast.makeText(this, "New Note!!!!", Toast.LENGTH_SHORT).show();
+            fragmentRouter.showNewNote();
         }
         return super.onOptionsItemSelected(item);
     }

@@ -42,7 +42,7 @@ public class NoteEditFragment extends Fragment {
     private EditText description;
     private NoteCategory noteCategory;
     private NoteColor noteColor;
-    private ArrayList<Chip> colorChips = new ArrayList<>();
+    private final ArrayList<Chip> colorChips = new ArrayList<>();
     private ChipGroup chipGroup;
 
     public static NoteEditFragment newInstance(@Nullable Note note) {
@@ -72,6 +72,7 @@ public class NoteEditFragment extends Fragment {
 
     private void setListeners() {
         requireView().findViewById(R.id.note_edit_save_button).setOnClickListener(v -> {
+            note.setDate(new Date());
             if (isEditMode) {
                 repository.modifyNote(
                         note,
@@ -85,6 +86,7 @@ public class NoteEditFragment extends Fragment {
             } else {
                 note.setColor(noteColor);
                 note.setDate(new Date());
+                note.setCategory(NoteCategory.getInstance().getCategoryId());
                 note.setDescription(description.getText().toString());
                 note.setTitle(Objects.requireNonNull(title.getText()).toString());
                 repository.addNote(note, result -> getParentFragmentManager().popBackStack());
@@ -123,5 +125,7 @@ public class NoteEditFragment extends Fragment {
             chipGroup.addView(chip);
             colorChips.add(chip);
         }
+        description.setText(note.getDescription());
+        requireView().setBackgroundColor(note.getColor().getColorId());
     }
 }
