@@ -51,9 +51,9 @@ public class NoteDescriptionEditFragment extends DialogFragment {
         textView.setText(text);
         view.findViewById(R.id.description_save_btn).setOnClickListener(v -> {
             if (textView.getText() != null) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString(NOTE_TEXT_KEY, textView.getText().toString());
-                    getParentFragmentManager().setFragmentResult(NOTE_DESCRIPTION_EDIT_RESULT, bundle);
+                Bundle bundle = new Bundle();
+                bundle.putString(NOTE_TEXT_KEY, textView.getText().toString());
+                getParentFragmentManager().setFragmentResult(NOTE_DESCRIPTION_EDIT_RESULT, bundle);
             }
             dismiss();
         });

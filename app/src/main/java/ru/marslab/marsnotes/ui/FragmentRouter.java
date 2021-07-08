@@ -1,5 +1,8 @@
 package ru.marslab.marsnotes.ui;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentManager;
 
 import ru.marslab.marsnotes.R;
@@ -18,6 +21,7 @@ public class FragmentRouter {
         this.fragmentManager = fragmentManager;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     public void showNotesList() {
         fragmentManager.beginTransaction()
                 .replace(
@@ -82,7 +86,6 @@ public class FragmentRouter {
                 .addToBackStack(SettingsFragment.TAG)
                 .commit();
     }
-
 
 
 }

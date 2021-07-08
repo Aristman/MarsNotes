@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -13,7 +12,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentContainerView;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -101,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements PublisherHolder, 
                     noteFragmentContainer.setVisibility(View.GONE);
                 }
                 return true;
-            } else if(item.getItemId() == R.id.main_screen) {
+            } else if (item.getItemId() == R.id.main_screen) {
                 fragmentRouter.showNotesList();
             }
             return false;

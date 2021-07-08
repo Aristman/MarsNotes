@@ -27,15 +27,14 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import ru.marslab.marsnotes.App;
 import ru.marslab.marsnotes.R;
 import ru.marslab.marsnotes.domain.Observer;
-import ru.marslab.marsnotes.domain.Repository;
-import ru.marslab.marsnotes.domain.model.Note;
 import ru.marslab.marsnotes.domain.Publisher;
 import ru.marslab.marsnotes.domain.PublisherHolder;
+import ru.marslab.marsnotes.domain.Repository;
+import ru.marslab.marsnotes.domain.model.Note;
 import ru.marslab.marsnotes.domain.model.NoteCategory;
 
 

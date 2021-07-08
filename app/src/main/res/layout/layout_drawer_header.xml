@@ -25,7 +25,7 @@
         app:layout_constraintBottom_toTopOf="@id/drawer_header_description"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         android:textAlignment="center"
-        android:text="@string/dreawer_header_title_text"/>
+        android:text="@string/dreawer_header_title_text" />
 
     <TextView
         android:id="@+id/drawer_header_description"
@@ -37,6 +37,6 @@
         app:layout_constraintBottom_toBottomOf="@id/drawer_header_image"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-        android:text="@string/dreawer_header_text"/>
+        android:text="@string/dreawer_header_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,7 +9,6 @@ import androidx.annotation.RequiresApi;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -53,7 +52,7 @@ public class RepositoryImplFirestore implements Repository {
                         notes = new ArrayList<>();
                         command.getDocuments().forEach(documentSnapshot ->
                                 notes.add(Objects.requireNonNull(documentSnapshot.toObject(NoteFirestore.class))
-                                .toNote(documentSnapshot.getId())));
+                                        .toNote(documentSnapshot.getId())));
                         callback.onSuccess(notes);
                     });
         } else {
