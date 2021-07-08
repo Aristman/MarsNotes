@@ -92,6 +92,9 @@ public class NoteEditFragment extends Fragment {
                 repository.addNote(note, result -> getParentFragmentManager().popBackStack());
             }
         });
+        requireView().findViewById(R.id.note_edit_cancel_button).setOnClickListener(
+                v -> getParentFragmentManager().popBackStack()
+        );
     }
 
     private void closeFragment(Note result) {
@@ -105,6 +108,7 @@ public class NoteEditFragment extends Fragment {
         } else {
             isEditMode = false;
             note = Note.newInstance();
+            noteColor = NoteColor.YELLOW;
         }
         title = view.findViewById(R.id.note_edit_title);
         category = view.findViewById(R.id.note_edit_category);

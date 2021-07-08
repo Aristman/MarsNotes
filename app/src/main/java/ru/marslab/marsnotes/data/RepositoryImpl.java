@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import ru.marslab.marsnotes.domain.Callback;
@@ -35,16 +36,15 @@ public class RepositoryImpl implements Repository {
         categories.add(new NoteCategory(id++, "Категория 2"));
         categories.add(new NoteCategory(id++, "Категория 3"));
         categories.add(new NoteCategory(id, "Категория 4"));
-        id = 1;
         notes.add(new Note(
-                id++,
+                UUID.randomUUID().toString(),
                 "Запись 1",
                 "описание записки номер 1",
                 Calendar.getInstance().getTime(),
                 11,
                 NoteColor.RED));
         notes.add(new Note(
-                id++,
+                UUID.randomUUID().toString(),
                 "Запись 2",
                 "описание sdfad asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasd fasdfasdf" +
                         "asdfasdf asdfasdf asdfasdf asdfa sdf asdfasdfasdf asdfasdfas df asdfasd fasd f asdf" +
@@ -53,7 +53,7 @@ public class RepositoryImpl implements Repository {
                 12,
                 NoteColor.YELLOW));
         notes.add(new Note(
-                id,
+                UUID.randomUUID().toString(),
                 "Запись 3",
                 "описание записки номер 3",
                 Calendar.getInstance().getTime(),

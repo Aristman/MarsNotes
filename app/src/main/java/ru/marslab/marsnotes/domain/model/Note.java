@@ -11,17 +11,19 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
+import ru.marslab.marsnotes.data.model.NoteFirestore;
+
 public class Note implements Parcelable {
 
     public static Note newInstance() {
         return new Note(
-                UUID.randomUUID().variant(),
+                UUID.randomUUID().toString(),
                 "",
                 ""
         );
     }
 
-    private final int id;
+    private final String id;
     private String title;
     private String description;
     private Date date;
@@ -33,7 +35,7 @@ public class Note implements Parcelable {
     private final SimpleDateFormat timeFormat =
             new SimpleDateFormat("HH:mm", Locale.getDefault());
 
-    public Note(int id, String title, String description, Date created, int categoryId, NoteColor color) {
+    public Note(String id, String title, String description, Date created, int categoryId, NoteColor color) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -43,7 +45,7 @@ public class Note implements Parcelable {
         this.color = color;
     }
 
-    public Note(int id, String title, String description) {
+    public Note(String id, String title, String description) {
         this(
                 id,
                 title,
@@ -54,8 +56,18 @@ public class Note implements Parcelable {
         );
     }
 
+    public NoteFirestore toFirestore() {
+        return new NoteFirestore(
+                this.title,
+                this.description,
+                this.date,
+                this.categoryId,
+                this.getColor().name()
+        );
+    }
+
     protected Note(Parcel in) {
-        id = in.readInt();
+        id = in.readString();
         title = in.readString();
         description = in.readString();
         categoryId = in.readInt();
@@ -138,7 +150,7 @@ public class Note implements Parcelable {
         this.color = color;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -149,7 +161,7 @@ public class Note implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeString(id);
         dest.writeString(title);
         dest.writeString(description);
         dest.writeInt(categoryId);
