@@ -1,11 +1,13 @@
 package ru.marslab.marsnotes.ui;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -26,14 +28,20 @@ public class MainActivity extends AppCompatActivity implements PublisherHolder, 
     private final Publisher publisher = new Publisher();
     private Toolbar toolbar;
     private FragmentRouter fragmentRouter;
+    private boolean isSingInGoogle = false;
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav_drawer);
         fragmentRouter = new FragmentRouter(getSupportFragmentManager());
         if (savedInstanceState == null) {
-            fragmentRouter.showNotesList();
+            if (isSingInGoogle) {
+                fragmentRouter.showNotesList();
+            } else {
+                fragmentRouter.showGoogleAuth();
+            }
         }
         initFragmentContainers();
         initToolbar();
@@ -70,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements PublisherHolder, 
         return super.onOptionsItemSelected(item);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     private void initDrawer() {
         DrawerLayout drawer = findViewById(R.id.drawer_main_layout);
 

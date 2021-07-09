@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import ru.marslab.marsnotes.R;
 import ru.marslab.marsnotes.domain.model.Note;
 import ru.marslab.marsnotes.ui.about.AboutFragment;
+import ru.marslab.marsnotes.ui.auth.GoogleAuthFragment;
 import ru.marslab.marsnotes.ui.note.NoteDetailsFragment;
 import ru.marslab.marsnotes.ui.note.NoteEditFragment;
 import ru.marslab.marsnotes.ui.note.NotesListFragment;
@@ -84,6 +85,17 @@ public class FragmentRouter {
                         SettingsFragment.TAG
                 )
                 .addToBackStack(SettingsFragment.TAG)
+                .commit();
+    }
+
+    public void showGoogleAuth() {
+        fragmentManager.beginTransaction()
+                .replace(
+                        R.id.main_fragment_container,
+                        GoogleAuthFragment.newInstance(),
+                        GoogleAuthFragment.TAG
+                )
+                .addToBackStack(GoogleAuthFragment.TAG)
                 .commit();
     }
 

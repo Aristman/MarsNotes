@@ -25,4 +25,5 @@
     <string name="fire_store_repo">Хранение в сети</string>
     <string name="google_store_repo">Подключить Google</string>
     <string name="google_vk_repo">Подключить ВК аккаунт</string>
+    <string name="no_google_auth">Ошибка авторизации Google</string>
 </resources>
