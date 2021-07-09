@@ -1,5 +1,6 @@
 package ru.marslab.marsnotes.ui.note;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -114,10 +115,19 @@ public class NotesListFragment extends Fragment {
             }
         }
         if (item.getItemId() == R.id.delete_note) {
-            repository.deleteNote(noteOnLongClicked, result -> {
-                notesListAdapter.deleteNote(noteOnLongClicked);
-                notesListAdapter.notifyItemRemoved(noteIndexOnLongClicked);
-            });
+            new AlertDialog.Builder(requireContext())
+                    .setMessage(R.string.confirm_delete_note)
+                    .setPositiveButton(R.string.yes, (dialog, which) -> {
+                        repository.deleteNote(noteOnLongClicked, result -> {
+                            notesListAdapter.deleteNote(noteOnLongClicked);
+                            notesListAdapter.notifyItemRemoved(noteIndexOnLongClicked);
+                            dialog.dismiss();
+                        });
+                    })
+                    .setNegativeButton(R.string.no, (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
         }
         return super.onContextItemSelected(item);
     }
