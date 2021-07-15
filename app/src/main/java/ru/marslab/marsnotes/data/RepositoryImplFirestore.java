@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,11 +29,6 @@ public class RepositoryImplFirestore implements Repository {
 
     private final String COLLECTION_NOTES = "marsNotes";
     private final String COLLECTION_NOTES_CATEGORY = "noteCategories";
-    private final String NOTE_TITLE = "title";
-    private final String NOTE_DESCRIPTION = "description";
-    private final String NOTE_DATE = "date";
-    private final String NOTE_CATEGORY = "category";
-    private final String NOTE_COLOR = "color";
     private final String CATEGORY_NAME = "name";
     public static final int NO_ITEM_INDEX = -1;
 
@@ -51,8 +47,13 @@ public class RepositoryImplFirestore implements Repository {
                     .addOnSuccessListener(command -> {
                         notes = new ArrayList<>();
                         command.getDocuments().forEach(documentSnapshot ->
-                                notes.add(Objects.requireNonNull(documentSnapshot.toObject(NoteFirestore.class))
-                                        .toNote(documentSnapshot.getId())));
+                                {
+                                    NoteFirestore newNote = documentSnapshot.toObject(NoteFirestore.class);
+                                    if (newNote != null) {
+                                        notes.add(newNote.toNote(documentSnapshot.getId()));
+                                    }
+                                }
+                        );
                         callback.onSuccess(notes);
                     });
         } else {
@@ -67,11 +68,14 @@ public class RepositoryImplFirestore implements Repository {
                     .get()
                     .addOnCompleteListener(task -> {
                         List<NoteCategory> result = new ArrayList<>();
-                        for (DocumentSnapshot document : Objects.requireNonNull(task.getResult()).getDocuments()) {
-                            result.add(new NoteCategory(
-                                    Integer.parseInt(document.getId()),
-                                    document.getString(CATEGORY_NAME)
-                            ));
+                        QuerySnapshot resultDocuments = task.getResult();
+                        if (resultDocuments != null) {
+                            for (DocumentSnapshot document : resultDocuments.getDocuments()) {
+                                result.add(new NoteCategory(
+                                        Integer.parseInt(document.getId()),
+                                        document.getString(CATEGORY_NAME)
+                                ));
+                            }
                         }
                         categories = result;
                         callback.onSuccess(categories);
@@ -87,8 +91,11 @@ public class RepositoryImplFirestore implements Repository {
                     .get()
                     .addOnCompleteListener(task -> {
                         List<String> result = new ArrayList<>();
-                        for (DocumentSnapshot document : Objects.requireNonNull(task.getResult()).getDocuments()) {
-                            result.add(document.getString(CATEGORY_NAME));
+                        QuerySnapshot resultDocuments = task.getResult();
+                        if (resultDocuments != null) {
+                            for (DocumentSnapshot document : resultDocuments.getDocuments()) {
+                                result.add(document.getString(CATEGORY_NAME));
+                            }
                         }
                         callback.onSuccess(result);
                     });
@@ -103,12 +110,15 @@ public class RepositoryImplFirestore implements Repository {
             fireStore.collection(COLLECTION_NOTES_CATEGORY)
                     .get()
                     .addOnCompleteListener(task -> {
-                        for (DocumentSnapshot document : Objects.requireNonNull(task.getResult()).getDocuments()) {
-                            if (document.getId().equals(String.valueOf(categoryId))) {
-                                callback.onSuccess(new NoteCategory(
-                                        categoryId,
-                                        document.getString(CATEGORY_NAME)
-                                ));
+                        QuerySnapshot resultDocuments = task.getResult();
+                        if (resultDocuments != null) {
+                            for (DocumentSnapshot document : resultDocuments.getDocuments()) {
+                                if (document.getId().equals(String.valueOf(categoryId))) {
+                                    callback.onSuccess(new NoteCategory(
+                                            categoryId,
+                                            document.getString(CATEGORY_NAME)
+                                    ));
+                                }
                             }
                         }
                     });
@@ -128,12 +138,15 @@ public class RepositoryImplFirestore implements Repository {
             fireStore.collection(COLLECTION_NOTES_CATEGORY)
                     .get()
                     .addOnCompleteListener(task -> {
-                        for (DocumentSnapshot document : Objects.requireNonNull(task.getResult()).getDocuments()) {
-                            if (Objects.equals(document.getString(CATEGORY_NAME), String.valueOf(categoryName))) {
-                                callback.onSuccess(new NoteCategory(
-                                        Integer.parseInt(document.getId()),
-                                        categoryName
-                                ));
+                        QuerySnapshot resultDocuments = task.getResult();
+                        if (resultDocuments != null) {
+                            for (DocumentSnapshot document : resultDocuments.getDocuments()) {
+                                if (Objects.equals(document.getString(CATEGORY_NAME), String.valueOf(categoryName))) {
+                                    callback.onSuccess(new NoteCategory(
+                                            Integer.parseInt(document.getId()),
+                                            categoryName
+                                    ));
+                                }
                             }
                         }
                     });
