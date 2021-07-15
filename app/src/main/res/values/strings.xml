@@ -26,4 +26,7 @@
     <string name="google_store_repo">Подключить Google</string>
     <string name="google_vk_repo">Подключить ВК аккаунт</string>
     <string name="no_google_auth">Ошибка авторизации Google</string>
+    <string name="confirm_delete_note">Вы действительно хотите удалить записку?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
 </resources>
