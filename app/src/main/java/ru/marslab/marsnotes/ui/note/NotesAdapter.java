@@ -1,12 +1,13 @@
 package ru.marslab.marsnotes.ui.note;
 
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +17,7 @@ import java.util.List;
 import ru.marslab.marsnotes.R;
 import ru.marslab.marsnotes.domain.model.Note;
 
+@RequiresApi(api = Build.VERSION_CODES.R)
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
 
 
@@ -30,7 +32,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     }
 
     private final Fragment fragment;
-    private List<Note> notes;
+    private List<Note> notes = List.of();
 
     private OnNoteClickListener noteClickListener;
 
@@ -76,6 +78,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     public void setListNotes(List<Note> notes) {
         this.notes = notes;
+        notifyDataSetChanged();
     }
 
     public void deleteNote(Note deleteNote) {

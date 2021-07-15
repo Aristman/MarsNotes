@@ -10,4 +10,5 @@
     <dimen name="note_image_view">128dp</dimen>
     <dimen name="space_24dp">24dp</dimen>
     <dimen name="drawer_header_image_size">128dp</dimen>
+    <dimen name="edit_description_height">440dp</dimen>
 </resources>

@@ -36,11 +36,11 @@ public class NoteCategory implements Parcelable {
         this.name = name;
     }
 
-    public int getId() {
+    public int getCategoryId() {
         return id;
     }
 
-    public String getName() {
+    public String getCategoryName() {
         return name;
     }
 

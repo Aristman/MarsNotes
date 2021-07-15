@@ -26,10 +26,11 @@
         app:layout_constraintTop_toBottomOf="@id/note_title"
         android:contentDescription="@string/note_image_description" />
 
-    <Spinner
+    <TextView
         android:id="@+id/note_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/note_image"
         app:layout_constraintTop_toTopOf="@id/note_image" />
@@ -45,7 +46,7 @@
         app:layout_constraintTop_toBottomOf="@id/note_category"
         app:layout_constraintStart_toEndOf="@id/note_image"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"/>
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/note_time"
