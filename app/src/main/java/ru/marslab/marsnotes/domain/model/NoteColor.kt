@@ -1,12 +1,12 @@
 package ru.marslab.marsnotes.domain.model
 
 enum class NoteColor(val colorId: Int, val colorName: String) {
-    WHITE(0xFFFFFF, "Белый"),
-    RED(0xFF0000, "Красный"),
-    BLUE(0x00FFFF, "Синий"),
-    GREEN(0x00FF00, "Зеленый"),
-    VIOLET(0xFF00FF, "Фиолетовый"),
-    SKY(0x00FFFF, "Голубой"),
-    YELLOW(0xFFFF00, "Желтый"),
-    GRAY(0x555555, "Серый");
+    WHITE(0xFFFFFFFF.toInt(), "Белый"),
+    RED(0xFFFF0000.toInt(), "Красный"),
+    BLUE(0xFF0000FF.toInt(), "Синий"),
+    GREEN(0xFF00FF00.toInt(), "Зеленый"),
+    VIOLET(0xFFFF00FF.toInt(), "Фиолетовый"),
+    SKY(0xFF00FFFF.toInt(), "Голубой"),
+    YELLOW(0xFFFFFF00.toInt(), "Желтый"),
+    GRAY(0xFF555555.toInt(), "Серый");
 }

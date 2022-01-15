@@ -16,6 +16,7 @@ class NoteEditFragment :
     private val repository: Repository by lazy { App.repository }
     private var isNewNoteMode = false
     private var note: Note = Note()
+    private var noteColor: NoteColor = NoteColor.YELLOW
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -25,7 +26,7 @@ class NoteEditFragment :
 
     private fun setListeners() {
         binding.noteEditSaveButton.setOnClickListener {
-            if (isNewNoteMode) {
+            if (!isNewNoteMode) {
                 repository.modifyNote(
                     note,
                     binding.noteEditTitle.text.toString(),
@@ -42,7 +43,7 @@ class NoteEditFragment :
                     Note(
                         description = binding.noteEditDescription.text.toString(),
                         title = binding.noteEditTitle.text.toString(),
-                        color = binding.noteEditColorsGroup.getChildAt(binding.noteEditColorsGroup.checkedChipId).tag as NoteColor
+                        color = noteColor
                     ),
                     NoteDetailsCallback(
                         callbackSuccessful = { parentFragmentManager.popBackStack() }
@@ -69,7 +70,7 @@ class NoteEditFragment :
             chip.setOnClickListener { v: View ->
                 val chipColor = v.tag as NoteColor
                 requireView().setBackgroundColor(chipColor.colorId)
-//                note = note.copy(color = chipColor)
+                noteColor = chipColor
             }
             binding.noteEditColorsGroup.addView(chip)
         }

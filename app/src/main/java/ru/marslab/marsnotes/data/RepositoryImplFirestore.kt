@@ -117,14 +117,14 @@ class RepositoryImplFirestore : Repository {
         color: NoteColor?,
         callback: Callback<Note>
     ) {
-        val noteFirestore = note.also { modifyNote ->
-            title?.let { modifyNote.copy(title = it) }
-            description?.let { modifyNote.copy(description = it) }
-            date?.let { modifyNote.copy(date = it) }
-            category?.let { modifyNote.copy(categoryId = it.categoryId) }
-            color?.let { modifyNote.copy(color = it) }
-            callback.onSuccess(modifyNote)
-        }.toFirestore()
+        val noteFirestore = Note(
+            id = note.id,
+            title = title ?: note.title,
+            description = description ?: note.description,
+            date = date ?: note.date,
+            categoryId = category?.categoryId ?: note.categoryId,
+            color = color ?: note.color
+        ).toFirestore()
         fireStore.collection(COLLECTION_NOTES)
             .document(note.id)
             .set(noteFirestore)
