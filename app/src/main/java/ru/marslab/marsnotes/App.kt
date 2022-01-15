@@ -8,6 +8,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         repository = RepositoryImplFirestore()
+        repository.init()
     }
 
     companion object {
