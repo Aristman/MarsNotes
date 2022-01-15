@@ -1,6 +1,5 @@
-package ru.marslab.marsnotes.domain;
+package ru.marslab.marsnotes.domain
 
-public interface PublisherHolder {
-
-    Publisher getPublisher();
+interface PublisherHolder {
+    val publisher: Publisher
 }

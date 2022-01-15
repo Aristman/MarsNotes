@@ -1,144 +1,85 @@
-package ru.marslab.marsnotes.data;
+package ru.marslab.marsnotes.data
 
-import android.os.Build;
+import ru.marslab.marsnotes.domain.Callback
+import ru.marslab.marsnotes.domain.Repository
+import ru.marslab.marsnotes.domain.model.Note
+import ru.marslab.marsnotes.domain.model.NoteCategory
+import ru.marslab.marsnotes.domain.model.NoteColor
+import java.time.LocalDateTime
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import ru.marslab.marsnotes.domain.Callback;
-import ru.marslab.marsnotes.domain.Repository;
-import ru.marslab.marsnotes.domain.model.Note;
-import ru.marslab.marsnotes.domain.model.NoteCategory;
-import ru.marslab.marsnotes.domain.model.NoteColor;
-
-public class RepositoryImpl implements Repository {
-    public static final int NO_ITEM_INDEX = -1;
-    public static final String ERROR_TAG = "NOTES_ERROR_TAG";
-
-
-    private final List<NoteCategory> categories;
-    private final List<Note> notes;
-
-    public RepositoryImpl() {
-        notes = new ArrayList<>();
-        categories = new ArrayList<>();
-        int id = 10;
-        categories.add(NoteCategory.getInstance());
-        categories.add(new NoteCategory(id++, "Категория 1"));
-        categories.add(new NoteCategory(id++, "Категория 2"));
-        categories.add(new NoteCategory(id++, "Категория 3"));
-        categories.add(new NoteCategory(id, "Категория 4"));
-        notes.add(new Note(
-                UUID.randomUUID().toString(),
-                "Запись 1",
-                "описание записки номер 1",
-                Calendar.getInstance().getTime(),
-                11,
-                NoteColor.RED));
-        notes.add(new Note(
-                UUID.randomUUID().toString(),
-                "Запись 2",
-                "описание sdfad asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasd fasdfasdf" +
-                        "asdfasdf asdfasdf asdfasdf asdfa sdf asdfasdfasdf asdfasdfas df asdfasd fasd f asdf" +
-                        "asdfasdf asdfasdf assdfasdf asdfasdf asdf   dsa f a sdf as dfasdfas записки номер 2",
-                Calendar.getInstance().getTime(),
-                12,
-                NoteColor.YELLOW));
-        notes.add(new Note(
-                UUID.randomUUID().toString(),
-                "Запись 3",
-                "описание записки номер 3",
-                Calendar.getInstance().getTime(),
-                10,
-                NoteColor.VIOLET));
+class RepositoryImpl : Repository {
+    private val categories = mutableListOf<NoteCategory>()
+    private val notes = mutableListOf<Note>()
+    override fun init() {
     }
 
-    @Override
-    public void getNotes(Callback<List<Note>> callback) {
-        callback.onSuccess(notes);
+    override fun getNotes(callback: Callback<List<Note>>) {
+        callback.onSuccess(notes)
     }
 
-    @Override
-    public void getCategories(Callback<List<NoteCategory>> callback) {
-        callback.onSuccess(categories);
+    override fun getCategories(callback: Callback<List<NoteCategory>>) {
+        callback.onSuccess(categories)
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public void getCategoryNames(Callback<List<String>> callback) {
-        callback.onSuccess(categories.stream().map(NoteCategory::getCategoryName)
-                .collect(Collectors.toList()));
+    override fun getCategoryNames(callback: Callback<List<String>>) {
+        callback.onSuccess(categories.map { it.categoryName })
     }
 
-    @Override
-    public void getCategory(int categoryId, Callback<NoteCategory> callback) {
-        for (NoteCategory category : categories) {
-            if (category.getCategoryId() == categoryId) {
-                callback.onSuccess(category);
+    override fun getCategory(categoryId: Int, callback: Callback<NoteCategory>) {
+        for (category in categories) {
+            if (category.categoryId == categoryId) {
+                callback.onSuccess(category)
             }
         }
     }
 
-    @Override
-    public void getCategoryByName(String categoryName, Callback<NoteCategory> callback) {
-        for (NoteCategory category : categories) {
-            if (category.getCategoryName().equals(categoryName)) {
-                callback.onSuccess(category);
+    override fun getCategoryByName(categoryName: String, callback: Callback<NoteCategory>) {
+        for (category in categories) {
+            if (category.categoryName == categoryName) {
+                callback.onSuccess(category)
             }
         }
     }
 
-    @Override
-    public void deleteNote(int deleteIndex, Callback<Note> callback) {
-        callback.onSuccess(notes.remove(deleteIndex));
+    override fun deleteNote(deleteIndex: Int, callback: Callback<Note>) {
+        callback.onSuccess(notes.removeAt(deleteIndex))
     }
 
-    @Override
-    public void deleteNote(Note note, Callback<Boolean> callback) {
-        callback.onSuccess(notes.remove(note));
+    override fun deleteNote(note: Note, callback: Callback<Boolean>) {
+        callback.onSuccess(notes.remove(note))
     }
 
-    @Override
-    public void addNote(Note note, Callback<Integer> callback) {
+    override fun addNote(note: Note, callback: Callback<Int>) {
         if (notes.add(note)) {
-            callback.onSuccess(notes.size() - 1);
+            callback.onSuccess(notes.size - 1)
         } else {
-            callback.onSuccess(NO_ITEM_INDEX);
+            callback.onSuccess(NO_ITEM_INDEX)
         }
     }
 
-    @Override
-    public void modifyNote(
-            @NonNull Note note,
-            @Nullable String title,
-            @Nullable String description,
-            @Nullable Date date,
-            @Nullable NoteCategory category,
-            @Nullable NoteColor color,
-            Callback<Note> callback) {
-        if (title != null) {
-            note.setTitle(title);
-        }
-        if (description != null) {
-            note.setDescription(description);
-        }
-        if (date != null) {
-            note.setDate(date);
-        }
-        if (category != null) {
-            note.setCategory(category.getCategoryId());
-        }
-        if (color != null) {
-            note.setColor(color);
-        }
-        callback.onSuccess(note);
+    override fun modifyNote(
+        note: Note,
+        title: String?,
+        description: String?,
+        date: LocalDateTime?,
+        category: NoteCategory?,
+        color: NoteColor?,
+        callback: Callback<Note>
+    ) {
+        callback.onSuccess(
+            note.also { modifyNote ->
+                title?.let { modifyNote.copy(title = it) }
+                description?.let { modifyNote.copy(description = it) }
+                date?.let { modifyNote.copy(date = it) }
+                category?.let { modifyNote.copy(categoryId = it.categoryId) }
+                color?.let { modifyNote.copy(color = it) }
+                callback.onSuccess(modifyNote)
+            }
+        )
+    }
+
+    companion object {
+        const val NO_ITEM_INDEX = -1
+        const val ERROR_TAG = "NOTES_ERROR_TAG"
     }
 }

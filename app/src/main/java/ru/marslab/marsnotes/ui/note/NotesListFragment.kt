@@ -1,134 +1,129 @@
-package ru.marslab.marsnotes.ui.note;
+package ru.marslab.marsnotes.ui.note
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
+import android.os.Bundle
+import android.view.ContextMenu
+import android.view.ContextMenu.ContextMenuInfo
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import ru.marslab.marslablib.FragmentBinding
+import ru.marslab.marsnotes.App
+import ru.marslab.marsnotes.R
+import ru.marslab.marsnotes.databinding.FragmentNotesListBinding
+import ru.marslab.marsnotes.domain.Callback
+import ru.marslab.marsnotes.domain.Publisher
+import ru.marslab.marsnotes.domain.PublisherHolder
+import ru.marslab.marsnotes.domain.Repository
+import ru.marslab.marsnotes.domain.model.Note
+import ru.marslab.marsnotes.ui.FragmentRouterHolder
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+class NotesListFragment :
+    FragmentBinding<FragmentNotesListBinding>(FragmentNotesListBinding::inflate) {
+    private val repository: Repository by lazy { App.repository }
+    private var publisher: Publisher? = null
+    private var notesListAdapter: NotesAdapter? = null
+    private var noteOnLongClicked: Note? = null
+    private var noteIndexOnLongClicked = 0
 
-import ru.marslab.marsnotes.App;
-import ru.marslab.marsnotes.R;
-import ru.marslab.marsnotes.domain.Publisher;
-import ru.marslab.marsnotes.domain.PublisherHolder;
-import ru.marslab.marsnotes.domain.Repository;
-import ru.marslab.marsnotes.domain.model.Note;
-import ru.marslab.marsnotes.ui.FragmentRouterHolder;
-
-@RequiresApi(api = Build.VERSION_CODES.R)
-public class NotesListFragment extends Fragment {
-
-    public static final String TAG = "NotesListFragment";
-
-    private Repository repository;
-
-    private Publisher publisher;
-    private NotesAdapter notesListAdapter;
-    private Note noteOnLongClicked;
-    private int noteIndexOnLongClicked;
-
-    public static NotesListFragment newInstance() {
-        return new NotesListFragment();
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        publisher = (context as? PublisherHolder)?.publisher
     }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        if (context instanceof PublisherHolder) {
-            publisher = ((PublisherHolder) context).getPublisher();
-        }
+    override fun onDetach() {
+        super.onDetach()
+        publisher = null
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        publisher = null;
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_notes_list, container, false)
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        repository = App.getRepository();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_notes_list, container, false);
-    }
-
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        RecyclerView notesList = view.findViewById(R.id.notes_list_rv);
-        notesList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        initNotesListAdapter();
-        notesList.setAdapter(notesListAdapter);
-        repository.getNotes(result -> notesListAdapter.setListNotes(result));
-    }
-
-
-    private void initNotesListAdapter() {
-        notesListAdapter = new NotesAdapter(this);
-        notesListAdapter.setNoteClickListeners(note -> {
-            if (publisher != null) {
-                publisher.notify(note);
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val notesList: RecyclerView = view.findViewById(R.id.notes_list_rv)
+        notesList.layoutManager = LinearLayoutManager(requireContext())
+        initNotesListAdapter()
+        notesList.adapter = notesListAdapter
+        repository.getNotes(object : Callback<List<Note>> {
+            override fun onSuccess(result: List<Note>) {
+                notesListAdapter?.setListNotes(result)
             }
-            if (!getResources().getBoolean(R.bool.isLandscape)) {
-                if (requireActivity() instanceof FragmentRouterHolder) {
-                    ((FragmentRouterHolder) requireActivity()).getRouter().showDetailsNote(note);
+
+            override fun onError() {
+            }
+        })
+    }
+
+    private fun initNotesListAdapter() {
+        notesListAdapter = NotesAdapter(
+            onClickListener = { note: Note ->
+                publisher?.notify(note)
+                if (!resources.getBoolean(R.bool.isLandscape)) {
+                    (requireActivity() as? FragmentRouterHolder)?.router?.showDetailsNote(note)
                 }
+            },
+            onLongClickListener = { note: Note?, index: Int ->
+                noteOnLongClicked = note
+                noteIndexOnLongClicked = index
             }
-        });
-        notesListAdapter.setNoteLongClickListener((note, index) -> {
-            noteOnLongClicked = note;
-            noteIndexOnLongClicked = index;
-        });
+        )
     }
 
-    @Override
-    public void onCreateContextMenu(
-            @NonNull ContextMenu menu,
-            @NonNull View v,
-            @Nullable ContextMenu.ContextMenuInfo menuInfo
+    override fun onCreateContextMenu(
+        menu: ContextMenu,
+        v: View,
+        menuInfo: ContextMenuInfo?
     ) {
-        requireActivity().getMenuInflater().inflate(R.menu.notes_list_item_context_menu, menu);
+        requireActivity().menuInflater.inflate(R.menu.notes_list_item_context_menu, menu)
     }
 
-    @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.edit_note) {
-            if (requireActivity() instanceof FragmentRouterHolder) {
-                ((FragmentRouterHolder) requireActivity()).getRouter().showEditNote(noteOnLongClicked);
-            }
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.edit_note) {
+            (requireActivity() as? FragmentRouterHolder)?.router?.showEditNote(noteOnLongClicked)
         }
-        if (item.getItemId() == R.id.delete_note) {
-            new AlertDialog.Builder(requireContext())
-                    .setMessage(R.string.confirm_delete_note)
-                    .setPositiveButton(R.string.yes, (dialog, which) -> {
-                        repository.deleteNote(noteOnLongClicked, result -> {
-                            notesListAdapter.deleteNote(noteOnLongClicked);
-                            notesListAdapter.notifyItemRemoved(noteIndexOnLongClicked);
-                            dialog.dismiss();
-                        });
-                    })
-                    .setNegativeButton(R.string.no, (dialog, which) -> {
-                        dialog.dismiss();
-                    })
-                    .show();
+        if (item.itemId == R.id.delete_note) {
+            AlertDialog.Builder(requireContext())
+                .setMessage(R.string.confirm_delete_note)
+                .setPositiveButton(R.string.yes) { dialog: DialogInterface, which: Int ->
+                    noteOnLongClicked?.let { note ->
+                        repository.deleteNote(
+                            note,
+                            object : Callback<Boolean> {
+                                override fun onSuccess(result: Boolean) {
+                                    notesListAdapter?.let {
+                                        it.deleteNote(noteOnLongClicked)
+                                        it.notifyItemRemoved(noteIndexOnLongClicked)
+                                    }
+                                    dialog.dismiss()
+                                }
+
+                                override fun onError() {
+                                }
+                            }
+                        )
+                    }
+                }
+                .setNegativeButton(R.string.no) { dialog: DialogInterface, which: Int -> dialog.dismiss() }
+                .show()
         }
-        return super.onContextItemSelected(item);
+        return super.onContextItemSelected(item)
+    }
+
+    companion object {
+        const val TAG = "NotesListFragment"
+        fun newInstance(): NotesListFragment {
+            return NotesListFragment()
+        }
     }
 }

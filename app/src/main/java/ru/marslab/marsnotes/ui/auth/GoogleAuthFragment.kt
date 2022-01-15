@@ -1,75 +1,60 @@
-package ru.marslab.marsnotes.ui.auth;
+package ru.marslab.marsnotes.ui.auth
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.os.Bundle
+import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.snackbar.Snackbar
+import ru.marslab.marslablib.FragmentBinding
+import ru.marslab.marsnotes.R
+import ru.marslab.marsnotes.databinding.FragmentGoogleAuthBinding
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+class GoogleAuthFragment : FragmentBinding<FragmentGoogleAuthBinding>(FragmentGoogleAuthBinding::inflate) {
+    private var googleSignInClient: GoogleSignInClient? = null
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
-
-import ru.marslab.marsnotes.R;
-
-public class GoogleAuthFragment extends Fragment {
-    public static final String TAG = "GoogleAuthFragment";
-    private static final int AUTH_REQUEST_CODE = 1;
-
-    private GoogleSignInClient googleSignInClient;
-
-    public static GoogleAuthFragment newInstance() {
-        return new GoogleAuthFragment();
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val signInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestId()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(requireContext(), signInOptions)
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestId()
-                .build();
-        googleSignInClient = GoogleSignIn.getClient(requireContext(), signInOptions);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState
-    ) {
-        return inflater.inflate(R.layout.fragment_google_auth, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        view.findViewById(R.id.google_sing_in_btn).setOnClickListener(v -> {
-            Intent intent = googleSignInClient.getSignInIntent();
-            startActivityForResult(intent, AUTH_REQUEST_CODE);
-        });
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == AUTH_REQUEST_CODE) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                GoogleSignInAccount result = task.getResult();
-
-            } catch (Exception e) {
-                Snackbar.make(requireContext(), requireView(), getString(R.string.no_google_auth), Snackbar.LENGTH_LONG).show();
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.buttonGoogleSingIn.setOnClickListener {
+            googleSignInClient?.signInIntent?.let { intent ->
+                registerForActivityResult(
+                    ActivityResultContracts.StartActivityForResult().apply {
+                        createIntent(requireContext(), intent)
+                    }
+                ) { activityResult ->
+                    if (activityResult.resultCode == AUTH_REQUEST_CODE) {
+                        val task = GoogleSignIn.getSignedInAccountFromIntent(activityResult.data)
+                        try {
+                            val result = task.result
+                        } catch (e: Exception) {
+                            Snackbar.make(
+                                requireContext(),
+                                requireView(),
+                                getString(R.string.no_google_auth),
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }
             }
+        }
+    }
+
+    companion object {
+        const val TAG = "GoogleAuthFragment"
+        private const val AUTH_REQUEST_CODE = 1
+        fun newInstance(): GoogleAuthFragment {
+            return GoogleAuthFragment()
         }
     }
 }

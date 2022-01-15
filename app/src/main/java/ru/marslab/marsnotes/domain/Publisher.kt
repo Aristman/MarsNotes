@@ -1,26 +1,18 @@
-package ru.marslab.marsnotes.domain;
+package ru.marslab.marsnotes.domain
 
-import java.util.ArrayList;
-import java.util.List;
+import ru.marslab.marsnotes.domain.model.Note
 
-import ru.marslab.marsnotes.domain.model.Note;
-
-public class Publisher {
-
-    private final List<Observer> observers = new ArrayList<>();
-
-    public void subscribe(Observer observer) {
-        observers.add(observer);
+class Publisher {
+    private val observers = mutableListOf<Observer>()
+    fun subscribe(observer: Observer) {
+        observers.add(observer)
     }
 
-    public void unSubscribe(Observer observer) {
-        observers.remove(observer);
+    fun unSubscribe(observer: Observer) {
+        observers.remove(observer)
     }
 
-    public void notify(Note note) {
-        for (Observer observer : observers) {
-            observer.updateNote(note);
-        }
+    fun notify(note: Note) {
+        observers.forEach { it.updateNote(note) }
     }
-
 }

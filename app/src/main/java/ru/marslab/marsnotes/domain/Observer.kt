@@ -1,8 +1,7 @@
-package ru.marslab.marsnotes.domain;
+package ru.marslab.marsnotes.domain
 
-import ru.marslab.marsnotes.domain.model.Note;
+import ru.marslab.marsnotes.domain.model.Note
 
-public interface Observer {
-
-    void updateNote(Note note);
+interface Observer {
+    fun updateNote(note: Note)
 }

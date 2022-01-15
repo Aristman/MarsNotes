@@ -1,120 +1,64 @@
-package ru.marslab.marsnotes.ui.note;
+package ru.marslab.marsnotes.ui.note
 
-import android.os.Build;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.annotation.SuppressLint
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import ru.marslab.marsnotes.databinding.ItemNotesListBinding
+import ru.marslab.marsnotes.domain.model.Note
+import ru.marslab.marsnotes.ui.note.NotesAdapter.NoteViewHolder
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
+class NotesAdapter(
+    private val onClickListener: (note: Note) -> Unit,
+    private val onLongClickListener: (note: Note, index: Int) -> Unit
+) : RecyclerView.Adapter<NoteViewHolder>() {
 
-import java.util.List;
+    private val notes = mutableListOf<Note>()
 
-import ru.marslab.marsnotes.R;
-import ru.marslab.marsnotes.domain.model.Note;
-
-@RequiresApi(api = Build.VERSION_CODES.R)
-public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
-
-
-    public interface OnNoteClickListener {
-
-        void onClickListener(@NonNull Note note);
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
+        val binding =
+            ItemNotesListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return NoteViewHolder(binding, onClickListener, onLongClickListener)
     }
 
-    public interface OnNoteLongClickListener {
-
-        void onLongClickListener(@NonNull Note note, int index);
+    override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
+        holder.bing(notes[position])
     }
 
-    private final Fragment fragment;
-    private List<Note> notes = List.of();
-
-    private OnNoteClickListener noteClickListener;
-
-    private OnNoteLongClickListener noteLongClickListener;
-
-    public OnNoteLongClickListener getNoteLongClickListener() {
-        return noteLongClickListener;
+    override fun getItemCount(): Int {
+        return notes.size
     }
 
-    public void setNoteLongClickListener(OnNoteLongClickListener noteLongClickListener) {
-        this.noteLongClickListener = noteLongClickListener;
-    }
-
-
-    public OnNoteClickListener getNoteClickListener() {
-        return noteClickListener;
-    }
-
-    public void setNoteClickListeners(OnNoteClickListener noteClickListener) {
-        this.noteClickListener = noteClickListener;
-    }
-
-    public NotesAdapter(Fragment fragment) {
-        this.fragment = fragment;
-    }
-
-    @NonNull
-    @Override
-    public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notes_list, parent, false);
-        return new NoteViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
-        holder.bing(notes.get(position));
-    }
-
-    @Override
-    public int getItemCount() {
-        return notes.size();
-    }
-
-    public void setListNotes(List<Note> notes) {
-        this.notes = notes;
-        notifyDataSetChanged();
-    }
-
-    public void deleteNote(Note deleteNote) {
-        notes.remove(deleteNote);
-    }
-
-    class NoteViewHolder extends RecyclerView.ViewHolder {
-        private final TextView noteTitle;
-        private final TextView noteDescription;
-        private final CardView noteCard;
-
-        private void bing(Note note) {
-            noteCard.setCardBackgroundColor(note.getColor().getColorId());
-            noteTitle.setText(note.getTitle());
-            noteDescription.setText(note.getDescription());
+    @SuppressLint("NotifyDataSetChanged")
+    fun setListNotes(notes: List<Note>) {
+        this.notes.apply {
+            clear()
+            addAll(notes)
         }
+        notifyDataSetChanged()
+    }
 
-        private NoteViewHolder(@NonNull View itemView) {
-            super(itemView);
-            fragment.registerForContextMenu(itemView);
-            itemView.setOnClickListener(v -> {
-                if (getNoteClickListener() != null) {
-                    getNoteClickListener().onClickListener(notes.get(getAdapterPosition()));
-                }
-            });
-            itemView.setOnLongClickListener(v -> {
-                itemView.showContextMenu();
-                if (getNoteLongClickListener() != null) {
-                    int index = getAdapterPosition();
-                    getNoteLongClickListener().onLongClickListener(notes.get(index), index);
-                }
-                return true;
-            });
-            noteCard = itemView.findViewById(R.id.note_card);
-            noteTitle = itemView.findViewById(R.id.item_notes_list_title);
-            noteDescription = itemView.findViewById(R.id.item_notes_list_description);
+    fun deleteNote(deleteNote: Note?) {
+        notes.remove(deleteNote)
+    }
+
+    inner class NoteViewHolder(
+        private val binding: ItemNotesListBinding,
+        private val onClickListener: (note: Note) -> Unit,
+        private val onLongClickListener: (note: Note, index: Int) -> Unit
+    ) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bing(note: Note) {
+            binding.noteCard.setCardBackgroundColor(note.color.colorId)
+            binding.itemNotesListTitle.text = note.title
+            binding.itemNotesListDescription.text = note.description
+            binding.root.setOnClickListener {
+                onClickListener(note)
+            }
+            binding.root.setOnLongClickListener {
+                onLongClickListener(note, adapterPosition)
+                true
+            }
         }
     }
 }

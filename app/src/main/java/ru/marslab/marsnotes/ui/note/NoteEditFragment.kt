@@ -1,134 +1,91 @@
-package ru.marslab.marsnotes.ui.note;
+package ru.marslab.marsnotes.ui.note
 
-import android.content.res.ColorStateList;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.content.res.ColorStateList
+import android.os.Bundle
+import android.view.View
+import com.google.android.material.chip.Chip
+import ru.marslab.marslablib.FragmentBinding
+import ru.marslab.marsnotes.App
+import ru.marslab.marsnotes.databinding.FragmentNoteEditBinding
+import ru.marslab.marsnotes.domain.Repository
+import ru.marslab.marsnotes.domain.model.Note
+import ru.marslab.marsnotes.domain.model.NoteColor
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+class NoteEditFragment :
+    FragmentBinding<FragmentNoteEditBinding>(FragmentNoteEditBinding::inflate) {
+    private val repository: Repository by lazy { App.repository }
+    private var isNewNoteMode = false
+    private var note: Note = Note()
 
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.textfield.TextInputEditText;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Objects;
-
-import ru.marslab.marsnotes.App;
-import ru.marslab.marsnotes.R;
-import ru.marslab.marsnotes.domain.Repository;
-import ru.marslab.marsnotes.domain.model.Note;
-import ru.marslab.marsnotes.domain.model.NoteCategory;
-import ru.marslab.marsnotes.domain.model.NoteColor;
-
-public class NoteEditFragment extends Fragment {
-    public static final String TAG = "NoteEditFragment";
-    private static final String ARG_NOTE = "ARG_NOTE";
-
-    private Repository repository;
-
-    private boolean isEditMode;
-    private Note note;
-
-    private TextInputEditText title;
-    private TextView category;
-    private EditText description;
-    private NoteCategory noteCategory;
-    private NoteColor noteColor;
-    private final ArrayList<Chip> colorChips = new ArrayList<>();
-    private ChipGroup chipGroup;
-
-    public static NoteEditFragment newInstance(@Nullable Note note) {
-        Bundle bundle = new Bundle();
-        NoteEditFragment noteEditFragment = new NoteEditFragment();
-        bundle.putParcelable(ARG_NOTE, note);
-        noteEditFragment.setArguments(bundle);
-        return noteEditFragment;
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
+        setListeners()
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
-        repository = App.getRepository();
-        return inflater.inflate(R.layout.fragment_note_edit, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initView(view);
-        setListeners();
-    }
-
-    private void setListeners() {
-        requireView().findViewById(R.id.note_edit_save_button).setOnClickListener(v -> {
-            note.setDate(new Date());
-            if (isEditMode) {
+    private fun setListeners() {
+        binding.noteEditSaveButton.setOnClickListener {
+            if (isNewNoteMode) {
                 repository.modifyNote(
-                        note,
-                        Objects.requireNonNull(title.getText()).toString(),
-                        description.getText().toString(),
-                        new Date(),
-                        null,
-                        noteColor,
-                        this::closeFragment
-                );
+                    note,
+                    binding.noteEditTitle.text.toString(),
+                    binding.noteEditDescription.text.toString(),
+                    note.date,
+                    null,
+                    note.color,
+                    NoteDetailsCallback(
+                        callbackSuccessful = { closeFragment() }
+                    )
+                )
             } else {
-                note.setColor(noteColor);
-                note.setDate(new Date());
-                note.setCategory(NoteCategory.getInstance().getCategoryId());
-                note.setDescription(description.getText().toString());
-                note.setTitle(Objects.requireNonNull(title.getText()).toString());
-                repository.addNote(note, result -> getParentFragmentManager().popBackStack());
+                repository.addNote(
+                    Note(
+                        description = binding.noteEditDescription.text.toString(),
+                        title = binding.noteEditTitle.text.toString(),
+                        color = binding.noteEditColorsGroup.getChildAt(binding.noteEditColorsGroup.checkedChipId).tag as NoteColor
+                    ),
+                    NoteDetailsCallback(
+                        callbackSuccessful = { parentFragmentManager.popBackStack() }
+                    )
+                )
             }
-        });
-        requireView().findViewById(R.id.note_edit_cancel_button).setOnClickListener(
-                v -> getParentFragmentManager().popBackStack()
-        );
+        }
+        binding.noteEditCancelButton.setOnClickListener { parentFragmentManager.popBackStack() }
     }
 
-    private void closeFragment(Note result) {
-        getParentFragmentManager().popBackStack();
+    private fun closeFragment() {
+        parentFragmentManager.popBackStack()
     }
 
-    private void initView(View view) {
-        if (getArguments() != null) {
-            isEditMode = true;
-            note = getArguments().getParcelable(ARG_NOTE);
-        } else {
-            isEditMode = false;
-            note = Note.newInstance();
-            noteColor = NoteColor.YELLOW;
+    private fun initView() {
+        isNewNoteMode = arguments == null
+        note = arguments?.getParcelable(ARG_NOTE) ?: Note()
+        binding.noteEditTitle.setText(note.title)
+        NoteColor.values().forEach { color ->
+            val chip = Chip(requireContext())
+            chip.chipBackgroundColor = ColorStateList.valueOf(color.colorId)
+            chip.text = color.colorName
+            chip.tag = color
+            chip.setOnClickListener { v: View ->
+                val chipColor = v.tag as NoteColor
+                requireView().setBackgroundColor(chipColor.colorId)
+//                note = note.copy(color = chipColor)
+            }
+            binding.noteEditColorsGroup.addView(chip)
         }
-        title = view.findViewById(R.id.note_edit_title);
-        category = view.findViewById(R.id.note_edit_category);
-        description = view.findViewById(R.id.note_edit_description);
-        chipGroup = view.findViewById(R.id.note_edit_colors_group);
+        binding.noteEditDescription.setText(note.description)
+        requireView().setBackgroundColor(note.color.colorId)
+    }
 
-        title.setText(note.getTitle());
-        for (NoteColor value : NoteColor.values()) {
-            Chip chip = new Chip(requireContext());
-            chip.setChipBackgroundColor(ColorStateList.valueOf(value.getColorId()));
-            chip.setText(value.getColorName());
-            chip.setTag(value);
-            chip.setOnClickListener(v -> {
-                NoteColor color = (NoteColor) v.getTag();
-                requireView().setBackgroundColor(color.getColorId());
-                noteColor = color;
-            });
-            chipGroup.addView(chip);
-            colorChips.add(chip);
+    companion object {
+        const val TAG = "NoteEditFragment"
+        private const val ARG_NOTE = "ARG_NOTE"
+        fun newInstance(note: Note?): NoteEditFragment {
+            val bundle = Bundle()
+            val noteEditFragment = NoteEditFragment()
+            bundle.putParcelable(ARG_NOTE, note)
+            noteEditFragment.arguments = bundle
+            return noteEditFragment
         }
-        description.setText(note.getDescription());
-        requireView().setBackgroundColor(note.getColor().getColorId());
     }
 }

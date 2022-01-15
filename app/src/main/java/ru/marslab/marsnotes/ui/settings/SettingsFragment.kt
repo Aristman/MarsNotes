@@ -1,47 +1,36 @@
-package ru.marslab.marsnotes.ui.settings;
+package ru.marslab.marsnotes.ui.settings
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
+import android.os.Bundle
+import android.view.View
+import android.widget.Toast
+import ru.marslab.marslablib.FragmentBinding
+import ru.marslab.marsnotes.databinding.FragmentSettingsBinding
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+class SettingsFragment :
+    FragmentBinding<FragmentSettingsBinding>(FragmentSettingsBinding::inflate) {
 
-import ru.marslab.marsnotes.R;
-
-public class SettingsFragment extends Fragment {
-    public static final String TAG = "SettingsFragment";
-
-    public static SettingsFragment newInstance() {
-        return new SettingsFragment();
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.run {
+            settingsSaveBtn.setOnClickListener { saveSettings() }
+            settingsCancelBtn.setOnClickListener { cancelSettings() }
+        }
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+    private fun cancelSettings() {
+        Toast.makeText(requireContext(), "Cancel settings", Toast.LENGTH_SHORT).show()
+        parentFragmentManager.popBackStack()
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        view.findViewById(R.id.settings_save_btn).setOnClickListener(v -> saveSettings());
-        view.findViewById(R.id.settings_cancel_btn).setOnClickListener(v -> cancelSettings());
+    private fun saveSettings() {
+        Toast.makeText(requireContext(), "Save settings", Toast.LENGTH_SHORT).show()
+        parentFragmentManager.popBackStack()
     }
 
-    private void cancelSettings() {
-        Toast.makeText(requireContext(), "Cancel settings", Toast.LENGTH_SHORT).show();
-        getParentFragmentManager().popBackStack();
-    }
-
-    private void saveSettings() {
-        Toast.makeText(requireContext(), "Save settings", Toast.LENGTH_SHORT).show();
-        getParentFragmentManager().popBackStack();
+    companion object {
+        const val TAG = "SettingsFragment"
+        fun newInstance(): SettingsFragment {
+            return SettingsFragment()
+        }
     }
 }

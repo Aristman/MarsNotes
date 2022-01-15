@@ -1,39 +1,21 @@
-package ru.marslab.marsnotes.ui.about;
+package ru.marslab.marsnotes.ui.about
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
+import android.os.Bundle
+import android.view.View
+import ru.marslab.marslablib.FragmentBinding
+import ru.marslab.marsnotes.databinding.FragmentAboutBinding
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+class AboutFragment : FragmentBinding<FragmentAboutBinding>(FragmentAboutBinding::inflate) {
 
-import ru.marslab.marsnotes.R;
-
-public class AboutFragment extends Fragment {
-    public static final String TAG = "AboutFragment";
-
-    public static AboutFragment newInstance() {
-        return new AboutFragment();
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.buttonAboutBack.setOnClickListener { parentFragmentManager.popBackStack() }
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_about, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        Button backButton = view.findViewById(R.id.about_back_btn);
-        backButton.setOnClickListener(v -> {
-            getParentFragmentManager().popBackStack();
-        });
+    companion object {
+        const val TAG = "AboutFragment"
+        fun newInstance(): AboutFragment {
+            return AboutFragment()
+        }
     }
 }

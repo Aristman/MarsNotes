@@ -1,6 +1,5 @@
-package ru.marslab.marsnotes.ui;
+package ru.marslab.marsnotes.ui
 
-public interface FragmentRouterHolder {
-
-    FragmentRouter getRouter();
+interface FragmentRouterHolder {
+    val router: FragmentRouter?
 }

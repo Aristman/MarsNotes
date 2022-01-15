@@ -1,6 +1,6 @@
-package ru.marslab.marsnotes.domain;
+package ru.marslab.marsnotes.domain
 
-public interface Callback<T> {
-
-    void onSuccess(T result);
+interface Callback<T> {
+    fun onSuccess(result: T)
+    fun onError()
 }
