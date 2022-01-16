@@ -1,7 +1,7 @@
 package ru.marslab.marsnotes
 
 import junit.framework.TestCase.assertTrue
-import org.junit.Before
+import org.junit.After
 import org.junit.Test
 import ru.marslab.marsnotes.data.RepositoryImpl
 import ru.marslab.marsnotes.domain.Callback
@@ -19,7 +19,7 @@ class ReposirotyImplTest {
         Note(id = "555")
     )
 
-    @Before
+    @After
     fun clearNotes() {
         repositoryImpl.clear()
     }
