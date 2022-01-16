@@ -82,8 +82,12 @@ class RepositoryImpl : Repository {
         notes.clear()
     }
 
-    fun getNotesCount(): Int =
-        notes.size
+    fun getNotesCount(): Int? =
+        if (notes.isEmpty()) {
+            null
+        } else {
+            notes.size
+        }
 
     companion object {
         const val NO_ITEM_INDEX = -1
