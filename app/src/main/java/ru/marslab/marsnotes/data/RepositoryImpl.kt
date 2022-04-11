@@ -78,6 +78,17 @@ class RepositoryImpl : Repository {
         )
     }
 
+    fun clear() {
+        notes.clear()
+    }
+
+    fun getNotesCount(): Int? =
+        if (notes.isEmpty()) {
+            null
+        } else {
+            notes.size
+        }
+
     companion object {
         const val NO_ITEM_INDEX = -1
         const val ERROR_TAG = "NOTES_ERROR_TAG"
